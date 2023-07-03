@@ -47,7 +47,7 @@ public class DatabaseConfig {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);    // 위의 연결부분을 가져와서 데이터베이스 세팅
         // mybatis orm을 통한 SQL 명령어가 있는 XML 파일 로드
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/**/sql-*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/sql/**/sql-*.xml"));
         // mybatis orm 사용 설정
         sqlSessionFactoryBean.setConfiguration(mybatisConfig());
 
