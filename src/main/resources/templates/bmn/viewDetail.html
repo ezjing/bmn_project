@@ -11,55 +11,169 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
           crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=92vw1jqd4q"></script>
   <style>
+    #map1 {
+      width: 100%;
+      height: 200px;
+    }
+    #map2 {
+      width: 100%;
+      height: 500px;
+    }
     #left-remote {
       position: fixed;
-      top: 20px;
+      top: 30px;
+      width: 220px;
     }
     
     #right-remote {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 30px;
+      right: 15%;
+      width: 220px;
+      
     }
-  </style>
+    </style>
   
   <script>
+    $(document).ready(function () {
+      var mapOptions = {
+        center: new naver.maps.LatLng(37.3595704, 127.105399),
+        zoom: 10
+      }
   
+      var map1 = new naver.maps.Map('map1', mapOptions);
+  
+      var marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(37.3595704, 127.105399),
+        map: map1
+      });
+  
+      // var mapOptions2 = {
+      //   center: new naver.maps.LatLng(37.3595704, 127.105399),
+      //   zoom: 20
+      // }
+      // var map2 = naver.maps.Map('map2', mapOptions2);
+      //
+      // var marker2 = new naver.maps.Marker({
+      //   position: new naver.maps.LatLng(37.3595704, 127.105399),
+      //   map: map2
+      // });
+      
+      
+      $("#btn-follow").on('click', function () {
+        if (sessionStorage.getItem('customerId') != null) {
+          location.href="/bmn/updateFollow";
+        }
+        else {
+          alert("팔로우 하려면 로그인 부탁드립니다.");
+          location.href="/bmn/login";
+        }
+      });
+      
+    })
   </script>
 </head>
 <body>
-<header></header>
-<main>
-  <div class="row">
-    <!--        왼쪽 리모컨-->
-    <div class="col-sm-2" id="left-remote">
-      <div class="border">지도구역</div>
-      <button class="btn btn-secondary">예약하기</button>
-      <div class="border">예약정보 구역</div>s
-    </div>
-    <div class="col-sm-8"></div>
-    <!--        오른쪽 리모컨-->
-    <div class="col-sm-2" id="right-remote">
-      <div class="border text-center d-flex flex-column">
-        <a href="#"><i class="bi bi-arrow-up-circle-fill" style="font-size: 20px; color: tomato"></i></a>
-        <a href="#"><i class="bi bi-arrow-down-circle-fill" style="font-size: 20px; color: tomato"></i></a>
-        <button>로그인</button>
-        <button>로그아웃</button>
+  <header></header>
+  
+  <main>
+    <div class="container" id="container">
+      <div class="row">
+        <!--        왼쪽 리모컨-->
+        <div class="col-sm-2 d-grid" id="left-remote">
+<!--          지도-->
+          <div class="border my-2" data-bs-toggle="modal" data-bs-target="#map-modal" id="map1"></div>
+          <a href="#" class="btn btn-secondary my-2">예약하기</a>
+          <div class="border rounded-2 p-2">예약정보 구역</div>
+        </div>
+        <div class="col-sm-8">
+        </div>
+        <!--        오른쪽 리모컨-->
+        <div class="col-sm-2" id="right-remote">
+          <div class="border rounded-2 text-center d-flex flex-column my-2">
+            <a href="#" class="my-2"><i class="bi bi-arrow-up-circle-fill" style="font-size: 20px; color: tomato"></i></a>
+            <a href="#" class="mb-2"><i class="bi bi-arrow-down-circle-fill"
+                                        style="font-size: 20px; color: tomato"></i></a>
+            <a class="btn mb-2">로그인</a>
+            <div></div>
+            <a class="btn mb-2">로그아웃</a>
+            <a class="btn mb-2">리뷰 쓰기</a>
+          </div>
+        </div>
+      </div>
+    
+      <div class="row my-4">
+        <div class="col-sm-8 mx-auto">
+          <div class="border rounded-2 p-2">
+            <p th:text="${ceoDto.ceoStore}" class="fw-bold fs-2">가게 이름</p>
+            <p th:text="${ceoDto.ceoCategoryM}" class="text-muted">카테고리</p>
+            <p th:text="|평점 : ${ceoDto.ceoScore}점|"></p>
+            <div class="row">
+              <div class="col-sm">
+                <button class="btn btn-primary m-3" id="btn-follow">#팔로우
+                  <span th:text="${followCnt}">3</span>
+                </button>
+                <input type="hidden" id="ceoIdx" value="${ceoDto.ceoIdx">
+              </div>
+              <div class="col-sm d-flex justify-content-end">
+                <button class="btn btn-outline-success m-3">#리뷰작성</button>
+              </div>
+            </div>
+          </div>
+          <div class="border rounded-2 my-3 p-2">
+            <p th:text="|가게명 : ${ceoDto.ceoStore}|">가게이름</p>
+            <p th:text="${ceoDto.ceoCityAddress}" class="text-muted"></p>
+            <p th:text="|주소 : ${ceoDto.ceoFullAddress}|">주소</p>
+            <p th:text="${ceoDto.ceoMainMenu}">대표메뉴</p>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="card"></div>
+                <img src="" alt="">
+              </div>
+            </div>
+            <p>사진</p>
+            <p th:text="${ceoDto.ceoDetailMenu}">상세메뉴</p>
+            <p th:text="${ceoDto.ceoContents}">매장소개</p>
+            <p th:text="${ceoDto.ceoOpenTime}">영업시간</p>
+            <p th:text="${ceoDto.ceoCallNumber}">전화번호</p>
+          </div>
+          <div class="my-5">
+            <h4 class="fw-bold">#방문자 리뷰</h4>
+            <hr>
+            <p th:text="${ceoDto.ceoScore}"><span>점</span></p>
+            <div th:if="${#lists.size(reviewList)} > 0" th:each="item : ${reviewList}" class="border rounded-3">
+              <p th:text=""></p>
+            </div>
+            <div th:unless="${#lists.size(reviewList)} > 0" th:each="item : ${reviewList}" class="border rounded-3">
+              <p>등록된 리뷰가 없습니다.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div>
-    <div class="row">
-      <div class="col-sm-8 mx-auto">
-        <p>상세</p>
+    
+    
+    <!--          모달 팝업 지도창-->
+    <div class="modal" id="map-modal">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">지도 확대하기</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div id="map2"></div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
-</main>
-<footer></footer>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  
+  <footer></footer>
+
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

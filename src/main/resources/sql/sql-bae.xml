@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.bmn_project.mapper.BaeMapper">
+	<select id="selectCeoDetail" parameterType="int" resultType="com.bitc.bmn_project.DTO.CeoDTO">
+		SELECT
+			ceo_idx, ceo_id, ceo_name, ceo_store, ceo_main_menu, ceo_detail_menu, ceo_menu_img, ceo_opentime,ceo_city_address, ceo_full_address, ceo_callnumber, ceo_contents, ceo_category_m, ceo_category_s,
+			ceo_thumbnail_img, ceo_main_img, ceo_score, ceo_lat, ceo_lon, ceo_grade
+		FROM
+			ceo_tp
+		WHERE
+			ceo_idx = #{ceoIdx}
+	</select>
+	
+	<select id="getFollows" parameterType="String" resultType="int">
+		SELECT
+			COUNT(*) AS follows_cnt
+		FROM
+			customer_tp
+		WHERE
+			customer_follow
+		LIKE
+<!--		like문은 표기형식 아래와 같이 해줘야 함-->
+			concat('%',#{ceoStore},'%')
+	</select>
+</mapper>
