@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.bitc.bmn_project.mapper.SimMapper">
+
+    <select id="idCheckCustomer" resultType="int" parameterType="String">
+        SELECT count(*) as cnt FROM customer_tp WHERE customer_id = #{userId}
+    </select>
+    <select id="idCheckCeo" resultType="int" parameterType="String">
+        SELECT count(*) as cnt FROM ceo_tp WHERE ceo_id = #{userId}
+    </select>
+    <insert id="signUpCustomer" parameterType="com.bitc.bmn_project.DTO.CustomerDTO">
+        INSERT INTO customer_tp (customer_id, customer_pw, customer_name, customer_nick, customer_gender, customer_age)
+        VALUES(#{customerId}, #{customerPw}, #{customerName}, #{customerNick}, #{customerGender}, #{customerAge})
+    </insert>
+
+    <insert id="signUpCeo" parameterType="com.bitc.bmn_project.DTO.CeoDTO">
+        INSERT INTO ceo_tp (ceo_id, ceo_pw, ceo_name)
+        VALUES(#{ceoId}, #{ceoPw}, #{ceoName} )
+    </insert>
+</mapper>
