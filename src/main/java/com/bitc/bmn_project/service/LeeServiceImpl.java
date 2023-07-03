@@ -21,4 +21,9 @@ public class LeeServiceImpl implements LeeService{
     public List<ReservationDTO> selectReservation(int ceoIdx) throws Exception {
         return leeMapper.selectReservation(ceoIdx);
     }
+
+    @Override
+    public ReservationDTO getReservationInfo(int customerIdx, int ceoIdx) throws Exception {
+        return leeMapper.getReservationInfo(customerIdx, ceoIdx);
+    }
 }
