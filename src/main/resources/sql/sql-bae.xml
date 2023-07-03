@@ -22,7 +22,22 @@
 		WHERE
 			customer_follow
 		LIKE
-<!--		like문은 표기형식 아래와 같이 해줘야 함-->
+<!--		mysql의 like문은 표기형식 아래와 같이 해줘야 함-->
 			concat('%',#{ceoStore},'%')
+	</select>
+	
+	<update id="updateFollow" parameterType="map">
+		UPDATE customer_tp SET customer_follow = concat(customer_follow, #{ceoStore}, ",")
+		WHERE customer_idx = #{customerIdx}
+	</update>
+	
+<!--	손님 데이터 조회-->
+	<select id="selectCustomerInfo" parameterType="int" resultType="com.bitc.bmn_project.DTO.CustomerDTO">
+		SELECT
+			customer_idx, customer_id, customer_name, customer_nick, customer_gender, customer_age, customer_follow
+		FROM
+			customer_tp
+		WHERE
+			customer_idx = #{customerIdx}
 	</select>
 </mapper>

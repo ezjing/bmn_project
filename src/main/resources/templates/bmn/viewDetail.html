@@ -63,13 +63,23 @@
       
       
       $("#btn-follow").on('click', function () {
-        if (sessionStorage.getItem('customerId') != null) {
-          location.href="/bmn/updateFollow";
-        }
-        else {
-          alert("팔로우 하려면 로그인 부탁드립니다.");
-          location.href="/bmn/login";
-        }
+        const ceoStore = $("#ceoStore").val();
+        const customerIdx = $("#customerIdx").val();
+  
+        $.ajax({
+          url: "/bmn/updateFollow",
+          type: "PUT",
+          data: {ceoStore: ceoStore, customerIdx: customerIdx},
+          success: function (data) {
+            if (data != null) {
+              alert(data);
+            }
+          },
+          error: function () {
+            alert("ajax 통신 중 오류 발생");
+          }
+        });
+
       });
       
     })
@@ -113,9 +123,10 @@
             <div class="row">
               <div class="col-sm">
                 <button class="btn btn-primary m-3" id="btn-follow">#팔로우
-                  <span th:text="${followCnt}">3</span>
+                  <span th:text="${followCnt}" id="follow-cnt">3</span>
                 </button>
-                <input type="hidden" id="ceoIdx" value="${ceoDto.ceoIdx">
+                <input type="hidden" id="ceoStore" th:value="${ceoDto.ceoStore}">
+                <input type="hidden" id="customerIdx" th:value="${session.customerIdx}">
               </div>
               <div class="col-sm d-flex justify-content-end">
                 <button class="btn btn-outline-success m-3">#리뷰작성</button>
@@ -124,25 +135,29 @@
           </div>
           <div class="border rounded-2 my-3 p-2">
             <p th:text="|가게명 : ${ceoDto.ceoStore}|">가게이름</p>
-            <p th:text="${ceoDto.ceoCityAddress}" class="text-muted"></p>
+            <p th:text="|시군구 : ${ceoDto.ceoCityAddress}|"></p>
             <p th:text="|주소 : ${ceoDto.ceoFullAddress}|">주소</p>
-            <p th:text="${ceoDto.ceoMainMenu}">대표메뉴</p>
+            <p th:text="|대표메뉴 : ${ceoDto.ceoMainMenu}|">대표메뉴</p>
             <div class="row">
               <div class="col-sm-4">
-                <div class="card"></div>
-                <img src="" alt="">
+                <div class="card" style="width: 40rem;">
+                  <img th:src="${ceoDto.ceoMenuImg}" class="card-img-top" alt="등록된 이미지가 없습니다.">
+                  <div class="card-body">
+                    <h5 class="card-title" th:text="|${ceoDto.ceoMainMenu}|">Card title</h5>
+                  </div>
+                </div>
+                
               </div>
             </div>
-            <p>사진</p>
             <p th:text="${ceoDto.ceoDetailMenu}">상세메뉴</p>
-            <p th:text="${ceoDto.ceoContents}">매장소개</p>
-            <p th:text="${ceoDto.ceoOpenTime}">영업시간</p>
-            <p th:text="${ceoDto.ceoCallNumber}">전화번호</p>
+            <p th:text="|식당 소개글 : ${ceoDto.ceoContents}|">매장소개</p>
+            <p th:text="|영업시간 : ${ceoDto.ceoOpenTime}|">영업시간</p>
+            <p th:text="|연락처 : ${ceoDto.ceoCallNumber}|">전화번호</p>
           </div>
           <div class="my-5">
             <h4 class="fw-bold">#방문자 리뷰</h4>
             <hr>
-            <p th:text="${ceoDto.ceoScore}"><span>점</span></p>
+            <p th:text="|${ceoDto.ceoScore}점|"></p>
             <div th:if="${#lists.size(reviewList)} > 0" th:each="item : ${reviewList}" class="border rounded-3">
               <p th:text=""></p>
             </div>

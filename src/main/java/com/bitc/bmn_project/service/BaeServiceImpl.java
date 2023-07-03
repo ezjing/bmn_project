@@ -1,6 +1,7 @@
 package com.bitc.bmn_project.service;
 
 import com.bitc.bmn_project.DTO.CeoDTO;
+import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.mapper.BaeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,16 @@ public class BaeServiceImpl implements BaeService {
   public int getFollows(String ceoStore) throws Exception {
     int result = baeMapper.getFollows(ceoStore);
     return result;
+  }
+
+  @Override
+  public void updateFollow(int customerIdx, String ceoStore) throws Exception {
+    baeMapper.updateFollow(customerIdx, ceoStore);
+  }
+
+  @Override
+  public CustomerDTO selectCustomerInfo(int customerIdx) throws Exception {
+    CustomerDTO customerDTO = baeMapper.selectCustomerInfo(customerIdx);
+    return customerDTO;
   }
 }
