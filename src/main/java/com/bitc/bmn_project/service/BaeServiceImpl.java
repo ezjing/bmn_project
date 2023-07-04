@@ -2,9 +2,12 @@ package com.bitc.bmn_project.service;
 
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
+import com.bitc.bmn_project.DTO.QuestionDTO;
 import com.bitc.bmn_project.mapper.BaeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BaeServiceImpl implements BaeService {
@@ -35,5 +38,21 @@ public class BaeServiceImpl implements BaeService {
   public CustomerDTO selectCustomerInfo(int customerIdx) throws Exception {
     CustomerDTO customerDTO = baeMapper.selectCustomerInfo(customerIdx);
     return customerDTO;
+  }
+
+  @Override
+  public void deleteFollow(int customerIdx, String ceoStore) throws Exception {
+    baeMapper.deleteFollow(customerIdx, ceoStore);
+  }
+
+  @Override
+  public List<QuestionDTO> selectQuestionList(int ceoIdx) throws Exception {
+    List<QuestionDTO> questionList = baeMapper.selectQuestionList(ceoIdx);
+    return questionList;
+  }
+
+  @Override
+  public void insertQuestion(QuestionDTO questionDTO) throws Exception {
+    baeMapper.insertQuestion(questionDTO);
   }
 }

@@ -4,6 +4,7 @@
 	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bitc.bmn_project.mapper.BaeMapper">
+<!--	식당 정보 조회-->
 	<select id="selectCeoDetail" parameterType="int" resultType="com.bitc.bmn_project.DTO.CeoDTO">
 		SELECT
 			ceo_idx, ceo_id, ceo_name, ceo_store, ceo_main_menu, ceo_detail_menu, ceo_menu_img, ceo_opentime,ceo_city_address, ceo_full_address, ceo_callnumber, ceo_contents, ceo_category_m, ceo_category_s,
@@ -14,22 +15,7 @@
 			ceo_idx = #{ceoIdx}
 	</select>
 	
-	<select id="getFollows" parameterType="String" resultType="int">
-		SELECT
-			COUNT(*) AS follows_cnt
-		FROM
-			customer_tp
-		WHERE
-			customer_follow
-		LIKE
-<!--		mysql의 like문은 표기형식 아래와 같이 해줘야 함-->
-			concat('%',#{ceoStore},'%')
-	</select>
 	
-	<update id="updateFollow" parameterType="map">
-		UPDATE customer_tp SET customer_follow = concat(customer_follow, #{ceoStore}, ",")
-		WHERE customer_idx = #{customerIdx}
-	</update>
 	
 <!--	손님 데이터 조회-->
 	<select id="selectCustomerInfo" parameterType="int" resultType="com.bitc.bmn_project.DTO.CustomerDTO">
@@ -40,4 +26,54 @@
 		WHERE
 			customer_idx = #{customerIdx}
 	</select>
+	
+<!--	팔로우 식당 추가-->
+	<update id="updateFollow" parameterType="map">
+		UPDATE customer_tp SET customer_follow = concat(customer_follow, #{ceoStore}, ",")
+		WHERE customer_idx = #{customerIdx}
+	</update>
+	
+<!--	팔로우한 식당 삭제-->
+	<update id="deleteFollow" parameterType="map">
+		UPDATE
+			customer_tp
+		SET
+			customer_follow = REPLACE(customer_follow, CONCAT(#{ceoStore}, ','), '')
+		WHERE
+			customer_idx = #{customerIdx}
+	</update>
+	
+<!--	팔로우 수 조회-->
+	<select id="getFollows" parameterType="String" resultType="int">
+		SELECT
+		COUNT(*) AS follows_cnt
+		FROM
+		customer_tp
+		WHERE
+		customer_follow
+		LIKE
+		<!--		mysql의 like문은 표기형식 아래와 같이 해줘야 함-->
+		concat('%',#{ceoStore},'%')
+	</select>
+	
+<!--	문의리스트 조회-->
+	<select id="selectQuestionList" parameterType="int" resultType="com.bitc.bmn_project.DTO.QuestionDTO">
+		SELECT
+			question_idx, customer_idx, customer_nick, ceo_idx, question_complete, question_title, question_contents, question_date, answer_contents, answer_date
+		FROM
+			question_tp
+		WHERE
+			ceo_idx = #{ceoIdx}
+		ORDER BY
+			question_idx DESC
+	</select>
+	
+<!--	손님 문의글 작성-->
+	<insert id="insertQuestion" parameterType="com.bitc.bmn_project.DTO.QuestionDTO">
+		INSERT INTO
+			question_tp
+				(customer_idx, customer_nick, ceo_idx, question_title, question_contents, question_date)
+			VALUES
+				(#{customerIdx}, #{customerNick}, #{ceoIdx}, #{questionTitle}, #{questionContents}, NOW())
+	</insert>
 </mapper>
