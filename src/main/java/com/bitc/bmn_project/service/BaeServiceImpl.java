@@ -55,4 +55,9 @@ public class BaeServiceImpl implements BaeService {
   public void insertQuestion(QuestionDTO questionDTO) throws Exception {
     baeMapper.insertQuestion(questionDTO);
   }
+
+  @Override
+  public void answerQuestion(QuestionDTO questionDTO) throws Exception {
+    baeMapper.answerQuestion(questionDTO);
+  }
 }

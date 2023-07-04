@@ -37,7 +37,7 @@ public class BaeController {
     // 문의 게시판
     List<QuestionDTO> questionList = baeService.selectQuestionList(ceoIdx);
 
-    session.setAttribute("customerIdx", 4);
+    session.setAttribute("customerIdx", 3);
     session.setAttribute("customerNick", "아이유");
 
     mv.addObject("ceoDto", ceoDto);
@@ -78,11 +78,13 @@ public class BaeController {
     return "redirect:/bmn/viewDetail/" + questionDTO.getCeoIdx();
   }
 
+  // 문의하기에 대한 사장님 답변
+  @RequestMapping(value = "/updateAnswer", method = RequestMethod.PUT)
+  public String answerQuestion(QuestionDTO questionDTO) throws Exception {
+    baeService.answerQuestion(questionDTO);
 
-
-
-
-
+    return "redirect:/bmn/viewDetail/" + questionDTO.getCeoIdx();
+  }
 
 }
 

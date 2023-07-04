@@ -21,4 +21,6 @@ public interface BaeService {
   List<QuestionDTO> selectQuestionList(int ceoIdx) throws Exception;
 
   void insertQuestion(QuestionDTO questionDTO) throws Exception;
+
+  void answerQuestion(QuestionDTO questionDTO) throws Exception;
 }

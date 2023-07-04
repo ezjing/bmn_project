@@ -76,4 +76,16 @@
 			VALUES
 				(#{customerIdx}, #{customerNick}, #{ceoIdx}, #{questionTitle}, #{questionContents}, NOW())
 	</insert>
+	
+<!--	사장님 문의글 답변-->
+	<update id="answerQuestion" parameterType="com.bitc.bmn_project.DTO.QuestionDTO">
+		UPDATE
+			question_tp
+		SET
+			answer_contents = #{answerContents},
+			answer_date = NOW(),
+			question_complete = '답변완료'
+		WHERE
+			question_idx = #{questionIdx}
+	</update>
 </mapper>
