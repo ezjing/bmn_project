@@ -9,5 +9,5 @@ public interface LeeService {
 
     List<ReservationDTO> selectReservation(int ceoIdx) throws Exception;
 
-    ReservationDTO getReservationInfo(int customerIdx, int ceoIdx) throws Exception;
+    ReservationDTO getReservationInfo(int customerIdx, int ceoIdx, String reservationDate, int reservationTime) throws Exception;
 }
