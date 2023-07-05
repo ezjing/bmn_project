@@ -153,15 +153,93 @@
       
       // $(".btn-question-page-num").on('click', function () {
       //   const ceoIdx = $("#ceoIdx").val();
-      //   const pageNum = $("#page-num").val();
+      //   var pageNum = $(this).val();
       //
-      //   location.href = "/bmn/viewDetail/" + ceoIdx + "?pageNum=" + pageNum;
-      //   $("#question-focus").focus();
+      //   $.ajax({
+      //     url: "/bmn/viewDetail/" + ceoIdx,
+      //     type: "POST",
+      //     data: {pageNum: pageNum},
+      //     success: function (data) {
+      //       if (data.length > 0) {
+      //         const questionList = data;
+      //         const qList = $("#q-list");
+      //         qList.empty();
+      //
+      //         let content
+      //           = "<div th:if=\"${#lists.size(questionList.getList())}>0\" th:each=\"item : ${questionList.getList()}\">\n" +
+      //           "              <div class=\"row text-center border border-top-0\">\n" +
+      //           "                <div class=\"col-sm-1\">\n" +
+      //           "                  <p class=\"mt-3\" th:text=\"${item.questionIdx}\"></p>\n" +
+      //           "                </div>\n" +
+      //           "                <div class=\"col-sm-2\">\n" +
+      //           "                  <p class=\"mt-3\" th:text=\"${item.questionComplete}\"\n" +
+      //           "                     th:attrappend=\"class=${item.questionComplete == '답변완료' ? ' text-muted' : ' fw-bold'}\"></p>\n" +
+      //           "                </div>\n" +
+      //           "                <div class=\"col-sm-5 d-flex align-items-center\">\n" +
+      //           "                  <a href=\"#question-detail\" th:attrappend=\"href=${itemStat.index}\"\n" +
+      //           "                     class=\"text-decoration-none text-black\" data-bs-toggle=\"collapse\"\n" +
+      //           "                     th:text=\"${item.questionTitle}\"></a>\n" +
+      //           "                </div>\n" +
+      //           "                <div class=\"col-sm-2\">\n" +
+      //           "                  <p class=\"mt-3\" th:text=\"${item.customerNick}\"></p>\n" +
+      //           "                </div>\n" +
+      //           "                <div class=\"col-sm-2\">\n" +
+      //           "                  <p class=\"mt-3\" th:text=\"${item.questionDate}\"></p>\n" +
+      //           "                </div>\n" +
+      //           "              </div>\n" +
+      //           "              <div class=\"collapse\" id=\"question-detail\" th:attrappend=\"id=${itemStat.index}\">\n" +
+      //           "                <div class=\"row border border-top-0\">\n" +
+      //           "                  <div class=\"col-sm-2\">\n" +
+      //           "                    <p class=\"m-3\">[문의내용]</p>\n" +
+      //           "                  </div>\n" +
+      //           "                  <div class=\"col-sm-10\">\n" +
+      //           "                    <p class=\"m-3\" th:text=\"${item.questionContents}\"></p>\n" +
+      //           "                  </div>\n" +
+      //           "                </div>\n" +
+      //           "                <div class=\"row border border-top-0\" th:if=\"${item.answerContents != null}\">\n" +
+      //           "                  <div class=\"col-sm-2\">\n" +
+      //           "                    <p class=\"m-3\">[답변내용]</p>\n" +
+      //           "                  </div>\n" +
+      //           "                  <div class=\"col-sm-8\">\n" +
+      //           "                    <p class=\"m-3\" th:text=\"${item.answerContents}\"></p>\n" +
+      //           "                  </div>\n" +
+      //           "                  <div class=\"col-sm-2\">\n" +
+      //           "                    <p class=\"m-3\" th:text=\"${item.answerDate}\"></p>\n" +
+      //           "                  </div>\n" +
+      //           "                </div>\n" +
+      //           "                <form method=\"post\" class=\"row border border-top-0\" th:unless=\"${item.answerContents != null}\">\n" +
+      //           "                  <div class=\"col-sm-2\">\n" +
+      //           "                    <p class=\"m-3\">[답변내용]</p>\n" +
+      //           "                  </div>\n" +
+      //           "                  <div class=\"col-sm-9 d-flex align-items-center\">\n" +
+      //           "                    <input type=\"text\" class=\"form-control answerContents\" name=\"answerContents\">\n" +
+      //           "                  </div>\n" +
+      //           "                  <div class=\"col-sm-1\">\n" +
+      //           "                    <button type=\"button\" class=\"btn btn-question-answer\"><i class=\"bi bi-pencil-square\" style=\"font-size:2rem\"></i>\n" +
+      //           "                    </button>\n" +
+      //           "                  </div>\n" +
+      //           "                  <input type=\"hidden\" class=\"questionIdx\" name=\"questionIdx\" th:value=\"${item.questionIdx}\">\n" +
+      //           "                  <!--                  <input type=\"hidden\" class=\"method\" name=\"_method\">-->\n" +
+      //           "                </form>\n" +
+      //           "              </div>\n" +
+      //           "            </div>\n" +
+      //           "            <div th:unless=\"${#lists.size(questionList.getList())}>0\">\n" +
+      //           "              <p>등록된 문의 글이 없습니다.</p>\n" +
+      //           "            </div>";
+      //
+      //         qList.append(content);
+      //       }
+      //
+      //     },
+      //     error: function () {
+      //       alert("ajax 오류 발생");
+      //     }
+      //   });
+      //
+      //
       // })
       
-      function questionFocus() {
-        $("#question-focus").focus()
-      }
+
       
     });
   
@@ -200,21 +278,20 @@
     <!--      가게 정보-->
     <div class="row my-4">
       <div class="col-sm-8 mx-auto">
-        <div class="border rounded-2 p-2">
-          <p th:text="${ceoDto.ceoStore}" class="fw-bold fs-2">가게 이름</p>
+        <div class="border rounded-2 p-3">
+          <p th:text="${ceoDto.ceoStore}" class="fw-bold fs-2 d-inline">가게 이름</p>
+          <button class="btn btn-outline-primary d-inline mb-3" id="btn-follow">#팔로우
+            <span th:text="${followCnt}" id="follow-cnt">3</span>
+          </button>
+          <input type="hidden" id="ceoStore" th:value="${ceoDto.ceoStore}">
+          <input type="hidden" id="ceoIdx" th:value="${ceoDto.ceoIdx}">
+          <input type="hidden" id="customerIdx" th:value="${session.customerIdx}">
           <p th:text="${ceoDto.getCeoCategory}" class="text-muted">카테고리</p>
           <p th:text="|평점 : ${ceoDto.ceoScore}점|"></p>
-          <div class="row">
-            <div class="col-sm">
-              <button class="btn btn-primary m-3" id="btn-follow">#팔로우
-                <span th:text="${followCnt}" id="follow-cnt">3</span>
-              </button>
-              <input type="hidden" id="ceoStore" th:value="${ceoDto.ceoStore}">
-              <input type="hidden" id="ceoIdx" th:value="${ceoDto.ceoIdx}">
-              <input type="hidden" id="customerIdx" th:value="${session.customerIdx}">
-            </div>
-            <div class="col-sm d-flex justify-content-end">
-              <button class="btn btn-outline-success m-3">#리뷰작성</button>
+          <div class="card" style="width: 40rem;">
+            <img th:src="${ceoDto.ceoMenuImg1}" class="card-img-top" alt="등록된 이미지가 없습니다.">
+            <div class="card-body">
+              <h5 class="card-title" th:text="|${ceoDto.ceoMainMenu}|">Card title</h5>
             </div>
           </div>
         </div>
@@ -223,18 +300,7 @@
           <p th:text="|시군구 : ${ceoDto.ceoCityAddress}|"></p>
           <p th:text="|주소 : ${ceoDto.ceoFullAddress}|">주소</p>
           <p th:text="|대표메뉴 : ${ceoDto.ceoMainMenu}|">대표메뉴</p>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="card" style="width: 40rem;">
-                <img th:src="${ceoDto.ceoMenuImg1}" class="card-img-top" alt="등록된 이미지가 없습니다.">
-                <div class="card-body">
-                  <h5 class="card-title" th:text="|${ceoDto.ceoMainMenu}|">Card title</h5>
-                </div>
-              </div>
-            
-            </div>
-          </div>
-          <p th:text="${ceoDto.ceoDetailMenu1}">상세메뉴</p>
+          <p th:text="|상세메뉴 : ${ceoDto.ceoDetailMenu1}|" class="mt-3">상세메뉴</p>
           <p th:text="|식당 소개글 : ${ceoDto.ceoContents}|">매장소개</p>
           <p th:text="|영업시간 : ${ceoDto.getCeoOpenTime}|">영업시간</p>
           <p th:text="|연락처 : ${ceoDto.ceoCallNumber}|">전화번호</p>
@@ -243,8 +309,45 @@
         <!--          방문자 리뷰-->
         <div class="my-5">
           <h4 class="fw-bold">#방문자 리뷰</h4>
+          <div class="border rounded-5 pt-3 px-3">
+            <p th:text="|총 ${reviewCnt}개의 소중한 리뷰정보가 있습니다.|" class="fw-semibold"></p>
+            <div class="row">
+              <div class="col-sm d-flex align-items-center">
+                <p style="margin-bottom: 0px">식당 평점 : <span th:text="${ceoDto.ceoScore}" class="fw-semibold"></span></p>
+              </div>
+              <div class="col-sm d-flex justify-content-end">
+                <button class="btn btn-outline-info m-3">#리뷰작성</button>
+              </div>
+            </div>
+          </div>
           <hr>
-          <p th:text="|${ceoDto.ceoScore}점|"></p>
+          <div class="border my-3 p-3" th:if="${#lists.size(reviewList)} > 0" th:each="item : ${reviewList}">
+            <div class="mx-3">
+              <p th:text="${item.customerNick}" class="fw-bold"></p>
+              <div class="row">
+                <div class="col-sm">
+                  <p>리뷰 평점 : <span th:text="${item.reviewScore}" class="bg-info fw-bold rounded p-1"></span></p>
+                </div>
+                <div class="col-sm d-flex justify-content-end">
+                  <p th:text="|${item.reviewDate} 작성|"></p>
+                </div>
+              </div>
+<!--              맛, 만족도, 서비스, 음식량, 대기시간, 청결도, 목적, 가격-->
+              <button class="btn btn-outline-info">맛</button>
+              <button class="btn btn-outline-info">가격</button>
+              <button class="btn btn-outline-info">분위기</button>
+            </div>
+            <div class="m-3 border rounded-3 p-2">
+              <p th:text="${item.reviewTitle}" class="fw-semibold"></p>
+              <p th:text="${item.reviewContents}"></p>
+              <div>
+                <img th:src="${item.reviewImg}" alt="이미지를 불러올 수 없습니다." style="width: 300px; height: 200px;">
+              </div>
+            </div>
+          </div>
+          <div class="border my-3" th:unless="${#lists.size(reviewList)} > 0">
+            <p>등록된 리뷰가 없습니다.</p>
+          </div>
         </div>
         
         <!--          식당 문의-->
@@ -271,159 +374,161 @@
               </div>
             </div>
           </div>
-          <div th:if="${#lists.size(questionList.getList())}>0" th:each="item : ${questionList.getList()}">
-            <div class="row text-center border border-top-0">
-              <div class="col-sm-1">
-                <p class="mt-3" th:text="${item.questionIdx}"></p>
-              </div>
-              <div class="col-sm-2">
-                <p class="mt-3" th:text="${item.questionComplete}"
-                   th:attrappend="class=${item.questionComplete == '답변완료' ? ' text-muted' : ' fw-bold'}"></p>
-              </div>
-              <div class="col-sm-5 d-flex align-items-center">
-                <a href="#question-detail" th:attrappend="href=${itemStat.index}"
-                   class="text-decoration-none text-black" data-bs-toggle="collapse"
-                   th:text="${item.questionTitle}"></a>
-              </div>
-              <div class="col-sm-2">
-                <p class="mt-3" th:text="${item.customerNick}"></p>
-              </div>
-              <div class="col-sm-2">
-                <p class="mt-3" th:text="${item.questionDate}"></p>
-              </div>
-            </div>
-            <div class="collapse" id="question-detail" th:attrappend="id=${itemStat.index}">
-              <div class="row border border-top-0">
-                <div class="col-sm-2">
-                  <p class="m-3">[문의내용]</p>
-                </div>
-                <div class="col-sm-10">
-                  <p class="m-3" th:text="${item.questionContents}"></p>
-                </div>
-              </div>
-              <div class="row border border-top-0" th:if="${item.answerContents != null}">
-                <div class="col-sm-2">
-                  <p class="m-3">[답변내용]</p>
-                </div>
-                <div class="col-sm-8">
-                  <p class="m-3" th:text="${item.answerContents}"></p>
-                </div>
-                <div class="col-sm-2">
-                  <p class="m-3" th:text="${item.answerDate}"></p>
-                </div>
-              </div>
-              <form method="post" class="row border border-top-0" th:unless="${item.answerContents != null}">
-                <div class="col-sm-2">
-                  <p class="m-3">[답변내용]</p>
-                </div>
-                <div class="col-sm-9 d-flex align-items-center">
-                  <input type="text" class="form-control answerContents" name="answerContents">
-                </div>
+          <div id="q-list">
+            <div th:if="${#lists.size(questionList.getList())}>0" th:each="item : ${questionList.getList()}">
+              <div class="row text-center border border-top-0">
                 <div class="col-sm-1">
-                  <button type="button" class="btn btn-question-answer"><i class="bi bi-pencil-square"
-                                                                           style="font-size:2rem"></i>
-                  </button>
+                  <p class="mt-3" th:text="${item.questionIdx}"></p>
                 </div>
-                <input type="hidden" class="questionIdx" name="questionIdx" th:value="${item.questionIdx}">
-                <!--                  <input type="hidden" class="method" name="_method">-->
-              </form>
+                <div class="col-sm-2">
+                  <p class="mt-3" th:text="${item.questionComplete}"
+                     th:attrappend="class=${item.questionComplete == '답변완료' ? ' text-muted' : ' fw-bold'}"></p>
+                </div>
+                <div class="col-sm-5 d-flex align-items-center">
+                  <a href="#question-detail" th:attrappend="href=${itemStat.index}"
+                     class="text-decoration-none text-black" data-bs-toggle="collapse"
+                     th:text="${item.questionTitle}"></a>
+                </div>
+                <div class="col-sm-2">
+                  <p class="mt-3" th:text="${item.customerNick}"></p>
+                </div>
+                <div class="col-sm-2">
+                  <p class="mt-3" th:text="${item.questionDate}"></p>
+                </div>
+              </div>
+              <div class="collapse" id="question-detail" th:attrappend="id=${itemStat.index}">
+                <div class="row border border-top-0">
+                  <div class="col-sm-2">
+                    <p class="m-3">[문의내용]</p>
+                  </div>
+                  <div class="col-sm-10">
+                    <p class="m-3" th:text="${item.questionContents}"></p>
+                  </div>
+                </div>
+                <div class="row border border-top-0" th:if="${item.answerContents != null}">
+                  <div class="col-sm-2">
+                    <p class="m-3">[답변내용]</p>
+                  </div>
+                  <div class="col-sm-8">
+                    <p class="m-3" th:text="${item.answerContents}"></p>
+                  </div>
+                  <div class="col-sm-2">
+                    <p class="m-3" th:text="${item.answerDate}"></p>
+                  </div>
+                </div>
+                <form method="post" class="row border border-top-0" th:unless="${item.answerContents != null}">
+                  <div class="col-sm-2">
+                    <p class="m-3">[답변내용]</p>
+                  </div>
+                  <div class="col-sm-9 d-flex align-items-center">
+                    <input type="text" class="form-control answerContents" name="answerContents">
+                  </div>
+                  <div class="col-sm-1">
+                    <button type="button" class="btn btn-question-answer"><i class="bi bi-pencil-square" style="font-size:2rem"></i>
+                    </button>
+                  </div>
+                  <input type="hidden" class="questionIdx" name="questionIdx" th:value="${item.questionIdx}">
+                  <!--                  <input type="hidden" class="method" name="_method">-->
+                </form>
+              </div>
+            </div>
+  
+  
+            <!--            페이징 전 문의목록 -->
+  
+            <!--            <div th:if="${#lists.size(questionList)}>0" th:each="item : ${questionList}">-->
+            <!--              <div class="row text-center border border-top-0">-->
+            <!--                <div class="col-sm-1">-->
+            <!--                  <p class="mt-3" th:text="${item.questionIdx}"></p>-->
+            <!--                </div>-->
+            <!--                <div class="col-sm-2">-->
+            <!--                  <p class="mt-3" th:text="${item.questionComplete}"-->
+            <!--                     th:attrappend="class=${item.questionComplete == '답변완료' ? ' text-muted' : ' fw-bold'}"></p>-->
+            <!--                </div>-->
+            <!--                <div class="col-sm-5 d-flex align-items-center">-->
+            <!--                  <a href="#question-detail" th:attrappend="href=${itemStat.index}"-->
+            <!--                     class="text-decoration-none text-black" data-bs-toggle="collapse"-->
+            <!--                     th:text="${item.questionTitle}"></a>-->
+            <!--                </div>-->
+            <!--                <div class="col-sm-2">-->
+            <!--                  <p class="mt-3" th:text="${item.customerNick}"></p>-->
+            <!--                </div>-->
+            <!--                <div class="col-sm-2">-->
+            <!--                  <p class="mt-3" th:text="${item.questionDate}"></p>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--              <div class="collapse" id="question-detail" th:attrappend="id=${itemStat.index}">-->
+            <!--                <div class="row border border-top-0">-->
+            <!--                  <div class="col-sm-2">-->
+            <!--                    <p class="m-3">[문의내용]</p>-->
+            <!--                  </div>-->
+            <!--                  <div class="col-sm-10">-->
+            <!--                    <p class="m-3" th:text="${item.questionContents}"></p>-->
+            <!--                  </div>-->
+            <!--                </div>-->
+            <!--                <div class="row border border-top-0" th:if="${item.answerContents != null}">-->
+            <!--                  <div class="col-sm-2">-->
+            <!--                    <p class="m-3">[답변내용]</p>-->
+            <!--                  </div>-->
+            <!--                  <div class="col-sm-8">-->
+            <!--                    <p class="m-3" th:text="${item.answerContents}"></p>-->
+            <!--                  </div>-->
+            <!--                  <div class="col-sm-2">-->
+            <!--                    <p class="m-3" th:text="${item.answerDate}"></p>-->
+            <!--                  </div>-->
+            <!--                </div>-->
+            <!--                <form method="post" class="row border border-top-0" th:unless="${item.answerContents != null}">-->
+            <!--                  <div class="col-sm-2">-->
+            <!--                    <p class="m-3">[답변내용]</p>-->
+            <!--                  </div>-->
+            <!--                  <div class="col-sm-9 d-flex align-items-center">-->
+            <!--                    <input type="text" class="form-control answerContents" name="answerContents">-->
+            <!--                  </div>-->
+            <!--                  <div class="col-sm-1">-->
+            <!--                    <button type="button" class="btn btn-question-answer"><i class="bi bi-pencil-square" style="font-size:2rem"></i>-->
+            <!--                    </button>-->
+            <!--                  </div>-->
+            <!--                  <input type="hidden" class="questionIdx" name="questionIdx" th:value="${item.questionIdx}">-->
+            <!--&lt;!&ndash;                  <input type="hidden" class="method" name="_method">&ndash;&gt;-->
+            <!--                </form>-->
+            <!--              </div>-->
+            <!--            </div>-->
+  
+  
+            <div th:unless="${#lists.size(questionList.getList())}>0">
+              <p>등록된 문의 글이 없습니다.</p>
             </div>
           </div>
           
           
-          <!--            페이징 전 문의목록 -->
-          
-          <!--            <div th:if="${#lists.size(questionList)}>0" th:each="item : ${questionList}">-->
-          <!--              <div class="row text-center border border-top-0">-->
-          <!--                <div class="col-sm-1">-->
-          <!--                  <p class="mt-3" th:text="${item.questionIdx}"></p>-->
-          <!--                </div>-->
-          <!--                <div class="col-sm-2">-->
-          <!--                  <p class="mt-3" th:text="${item.questionComplete}"-->
-          <!--                     th:attrappend="class=${item.questionComplete == '답변완료' ? ' text-muted' : ' fw-bold'}"></p>-->
-          <!--                </div>-->
-          <!--                <div class="col-sm-5 d-flex align-items-center">-->
-          <!--                  <a href="#question-detail" th:attrappend="href=${itemStat.index}"-->
-          <!--                     class="text-decoration-none text-black" data-bs-toggle="collapse"-->
-          <!--                     th:text="${item.questionTitle}"></a>-->
-          <!--                </div>-->
-          <!--                <div class="col-sm-2">-->
-          <!--                  <p class="mt-3" th:text="${item.customerNick}"></p>-->
-          <!--                </div>-->
-          <!--                <div class="col-sm-2">-->
-          <!--                  <p class="mt-3" th:text="${item.questionDate}"></p>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div class="collapse" id="question-detail" th:attrappend="id=${itemStat.index}">-->
-          <!--                <div class="row border border-top-0">-->
-          <!--                  <div class="col-sm-2">-->
-          <!--                    <p class="m-3">[문의내용]</p>-->
-          <!--                  </div>-->
-          <!--                  <div class="col-sm-10">-->
-          <!--                    <p class="m-3" th:text="${item.questionContents}"></p>-->
-          <!--                  </div>-->
-          <!--                </div>-->
-          <!--                <div class="row border border-top-0" th:if="${item.answerContents != null}">-->
-          <!--                  <div class="col-sm-2">-->
-          <!--                    <p class="m-3">[답변내용]</p>-->
-          <!--                  </div>-->
-          <!--                  <div class="col-sm-8">-->
-          <!--                    <p class="m-3" th:text="${item.answerContents}"></p>-->
-          <!--                  </div>-->
-          <!--                  <div class="col-sm-2">-->
-          <!--                    <p class="m-3" th:text="${item.answerDate}"></p>-->
-          <!--                  </div>-->
-          <!--                </div>-->
-          <!--                <form method="post" class="row border border-top-0" th:unless="${item.answerContents != null}">-->
-          <!--                  <div class="col-sm-2">-->
-          <!--                    <p class="m-3">[답변내용]</p>-->
-          <!--                  </div>-->
-          <!--                  <div class="col-sm-9 d-flex align-items-center">-->
-          <!--                    <input type="text" class="form-control answerContents" name="answerContents">-->
-          <!--                  </div>-->
-          <!--                  <div class="col-sm-1">-->
-          <!--                    <button type="button" class="btn btn-question-answer"><i class="bi bi-pencil-square" style="font-size:2rem"></i>-->
-          <!--                    </button>-->
-          <!--                  </div>-->
-          <!--                  <input type="hidden" class="questionIdx" name="questionIdx" th:value="${item.questionIdx}">-->
-          <!--&lt;!&ndash;                  <input type="hidden" class="method" name="_method">&ndash;&gt;-->
-          <!--                </form>-->
-          <!--              </div>-->
-          <!--            </div>-->
+<!--          버튼 태그 페이징-->
+<!--          <div class="my-3">-->
+<!--            <ul class="pagination d-flex justify-content-end">-->
+<!--              -->
+<!--              &lt;!&ndash;                이전 페이지 버튼&ndash;&gt;-->
+<!--              <li class="page-item" th:classappend="${questionList.getPrePage() == 0} ? 'disabled'">-->
+<!--                <button type="button" class="page-link" id="btn-question-prev">&laquo;</button>-->
+<!--                <input type="hidden" id="prev-page-num" th:value="${questionList.getPrePage()}">-->
+<!--              </li>-->
+<!--              -->
+<!--              &lt;!&ndash;                네비게이션 버튼&ndash;&gt;-->
+<!--              <li class="page-item"-->
+<!--                  th:each="page : ${#numbers.sequence(questionList.getNavigateFirstPage(), questionList.getNavigateLastPage())}"-->
+<!--                  th:classappend="${page == questionList.getPageNum()} ? 'active'">-->
+<!--                <button type="button" class="page-link btn-question-page-num" th:text="${page}" th:value="${page}"></button>-->
+<!--                <input type="hidden" id="page-num" th:value="${page}">-->
+<!--              </li>-->
+<!--              -->
+<!--              &lt;!&ndash;                다음 페이지 버튼&ndash;&gt;-->
+<!--              <li class="page-item" th:classappend="${questionList.getNextPage() == 0} ? 'disabled'">-->
+<!--                <button type="button" class="page-link" id="btn-question-next">&raquo;</button>-->
+<!--                <input type="hidden" id="next-page-num" th:value="${questionList.getNextPage()}">-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
           
           
-          <div th:unless="${#lists.size(questionList.getList())}>0">
-            <p>등록된 문의 글이 없습니다.</p>
-          </div>
-          
-          <div class="my-3">
-            <ul class="pagination d-flex justify-content-end">
-              
-              <!--                이전 페이지 버튼-->
-              <li class="page-item" th:classappend="${questionList.getPrePage() == 0} ? 'disabled'">
-                <button type="button" class="page-link" id="btn-question-prev">&laquo;</button>
-                <input type="hidden" id="prev-page-num" th:value="${questionList.getPrePage()}">
-              </li>
-              
-              <!--                네비게이션 버튼-->
-              <li class="page-item"
-                  th:each="page : ${#numbers.sequence(questionList.getNavigateFirstPage(), questionList.getNavigateLastPage())}"
-                  th:classappend="${page == questionList.getPageNum()} ? 'active'">
-                <button type="button" class="page-link btn-question-page-num" th:text="${page}"
-                        onclick="pageClick(this.value)" th:value="${page}"></button>
-                <input type="hidden" id="page-num" th:value="${page}">
-              </li>
-              
-              <!--                다음 페이지 버튼-->
-              <li class="page-item" th:classappend="${questionList.getNextPage() == 0} ? 'disabled'">
-                <button type="button" class="page-link" id="btn-question-next">&raquo;</button>
-                <input type="hidden" id="next-page-num" th:value="${questionList.getNextPage()}">
-              </li>
-            </ul>
-          </div>
-          
-          
-          <!--            페이징 리스트 (페이징 후 맨 위로 감)-->
+          <!--            a태그 페이징 (페이징 후 맨 위로 감)-->
           
           <div class="my-3">
             <ul class="pagination d-flex justify-content-end">

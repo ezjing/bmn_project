@@ -3,6 +3,7 @@ package com.bitc.bmn_project.controller;
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.DTO.QuestionDTO;
+import com.bitc.bmn_project.DTO.ReviewDTO;
 import com.bitc.bmn_project.service.BaeService;
 import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +38,13 @@ public class BaeController {
     // 팔로워 수 ceoTp 연동
     baeService.updateCeoTpFollows(followCnt, ceoIdx);
 
+    // 총 리뷰수 조회
+    int reviewCnt = baeService.getReviewCnt(ceoIdx);
+
+    // 리뷰정보 조회
+    List<ReviewDTO> reviewList = baeService.selectReviewList(ceoIdx);
+
+
     // 문의 게시판(페이징 처리)
     PageInfo<QuestionDTO> questionList = new PageInfo<>(baeService.selectQuestionList(ceoIdx, pageNum), 5);
 
@@ -48,6 +56,8 @@ public class BaeController {
 
     mv.addObject("ceoDto", ceoDto);
     mv.addObject("followCnt", followCnt);
+    mv.addObject("reviewCnt", reviewCnt);
+    mv.addObject("reviewList", reviewList);
     mv.addObject("questionList", questionList);
 
     return mv;
@@ -93,12 +103,12 @@ public class BaeController {
 //    return "redirect:/bmn/viewDetail/" + questionDTO.getCeoIdx();
   }
 
-//  @ResponseBody
-//  @RequestMapping(value = "/viewDetail/{ceoIdx}", method = RequestMethod.POST)
-//  public String questionPageControll(@PathVariable("ceoIdx") int ceoIdx, @RequestParam("pageNum") int pageNum) throws Exception {
-//    PageInfo<QuestionDTO> questionList = new PageInfo<>(baeService.selectQuestionList(ceoIdx, pageNum), 5);
-//
-//    return "redirect:/bmn/viewDetail/" + ceoIdx;
-//  }
+  @ResponseBody
+  @RequestMapping(value = "/viewDetail/{ceoIdx}", method = RequestMethod.POST)
+  public Object questionPageControll(@PathVariable("ceoIdx") int ceoIdx, @RequestParam("pageNum") int pageNum) throws Exception {
+    PageInfo<QuestionDTO> questionList = new PageInfo<>(baeService.selectQuestionList(ceoIdx, pageNum), 5);
+
+    return questionList;
+  }
 }
 

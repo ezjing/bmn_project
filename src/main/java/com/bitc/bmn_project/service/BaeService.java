@@ -3,6 +3,7 @@ package com.bitc.bmn_project.service;
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.DTO.QuestionDTO;
+import com.bitc.bmn_project.DTO.ReviewDTO;
 import com.github.pagehelper.Page;
 
 import java.util.List;
@@ -26,4 +27,8 @@ public interface BaeService {
   void answerQuestion(QuestionDTO questionDTO) throws Exception;
 
   void updateCeoTpFollows(int followCnt, int ceoIdx) throws Exception;
+
+  int getReviewCnt(int ceoIdx) throws Exception;
+
+  List<ReviewDTO> selectReviewList(int ceoIdx) throws Exception;
 }

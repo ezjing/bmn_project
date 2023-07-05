@@ -3,9 +3,12 @@ package com.bitc.bmn_project.mapper;
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.DTO.QuestionDTO;
+import com.bitc.bmn_project.DTO.ReviewDTO;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface BaeMapper {
@@ -27,4 +30,8 @@ public interface BaeMapper {
   void answerQuestion(QuestionDTO questionDTO) throws Exception;
 
   void updateCeoTpFollows(int followCnt, int ceoIdx) throws Exception;
+
+  int getReviewCnt(int ceoIdx) throws Exception;
+
+  List<ReviewDTO> selectReviewList(int ceoIdx) throws Exception;
 }

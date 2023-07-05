@@ -67,6 +67,29 @@
 			ceo_idx = #{ceoIdx}
 	</update>
 	
+<!--	리뷰 수 조회-->
+	<select id="getReviewCnt" parameterType="int" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			review_tp
+		WHERE
+			ceo_idx = #{ceoIdx}
+	</select>
+	
+<!--	리뷰 리스트 가져오기-->
+	<select id="selectReviewList" parameterType="int" resultType="com.bitc.bmn_project.DTO.ReviewDTO">
+		SELECT
+			review_idx, customer_idx, customer_nick, review_title, review_contents, review_img, review_date, review_score
+		FROM
+			review_tp
+		WHERE
+			ceo_idx = 70 AND review_delete = 'N'
+		ORDER BY
+			review_idx DESC
+	</select>
+	
+	
 <!--	문의리스트 조회-->
 	<select id="selectQuestionList" parameterType="int" resultType="com.bitc.bmn_project.DTO.QuestionDTO">
 		SELECT

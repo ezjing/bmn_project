@@ -3,6 +3,7 @@ package com.bitc.bmn_project.service;
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.DTO.QuestionDTO;
+import com.bitc.bmn_project.DTO.ReviewDTO;
 import com.bitc.bmn_project.mapper.BaeMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -68,5 +69,17 @@ public class BaeServiceImpl implements BaeService {
   @Override
   public void updateCeoTpFollows(int followCnt, int ceoIdx) throws Exception {
     baeMapper.updateCeoTpFollows(followCnt, ceoIdx);
+  }
+
+  @Override
+  public int getReviewCnt(int ceoIdx) throws Exception {
+    int reviewCnt = baeMapper.getReviewCnt(ceoIdx);
+    return reviewCnt;
+  }
+
+  @Override
+  public List<ReviewDTO> selectReviewList(int ceoIdx) throws Exception {
+    List<ReviewDTO> reviewList = baeMapper.selectReviewList(ceoIdx);
+    return reviewList;
   }
 }
