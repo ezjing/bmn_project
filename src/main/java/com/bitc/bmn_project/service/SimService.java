@@ -2,6 +2,7 @@ package com.bitc.bmn_project.service;
 
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public interface SimService {
 
@@ -11,4 +12,6 @@ public interface SimService {
     void signUpCustomer(CustomerDTO customer) throws Exception;
 
     void signUpCeo(CeoDTO ceo) throws Exception;
+
+    void addStore(CeoDTO store, MultipartHttpServletRequest multipart) throws Exception;
 }

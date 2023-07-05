@@ -8,9 +8,11 @@
     <select id="idCheckCustomer" resultType="int" parameterType="String">
         SELECT count(*) as cnt FROM customer_tp WHERE customer_id = #{userId}
     </select>
+
     <select id="idCheckCeo" resultType="int" parameterType="String">
         SELECT count(*) as cnt FROM ceo_tp WHERE ceo_id = #{userId}
     </select>
+
     <insert id="signUpCustomer" parameterType="com.bitc.bmn_project.DTO.CustomerDTO">
         INSERT INTO customer_tp (customer_id, customer_pw, customer_name, customer_nick, customer_gender, customer_age)
         VALUES(#{customerId}, #{customerPw}, #{customerName}, #{customerNick}, #{customerGender}, #{customerAge})

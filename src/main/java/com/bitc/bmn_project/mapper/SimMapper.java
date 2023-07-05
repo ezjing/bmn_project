@@ -13,4 +13,6 @@ public interface SimMapper {
     void signUpCustomer(CustomerDTO customer) throws Exception;
 
     void signUpCeo(CeoDTO ceo) throws Exception;
+
+    void addStore(CeoDTO store) throws Exception;
 }
