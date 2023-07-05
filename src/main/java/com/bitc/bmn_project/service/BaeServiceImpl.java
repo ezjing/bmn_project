@@ -4,6 +4,8 @@ import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.DTO.QuestionDTO;
 import com.bitc.bmn_project.mapper.BaeMapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,9 +48,11 @@ public class BaeServiceImpl implements BaeService {
   }
 
   @Override
-  public List<QuestionDTO> selectQuestionList(int ceoIdx) throws Exception {
-    List<QuestionDTO> questionList = baeMapper.selectQuestionList(ceoIdx);
-    return questionList;
+  public Page<QuestionDTO> selectQuestionList(int ceoIdx, int pageNum) throws Exception {
+
+    PageHelper.startPage(pageNum, 5);
+
+    return baeMapper.selectQuestionList(ceoIdx);
   }
 
   @Override
@@ -59,5 +63,10 @@ public class BaeServiceImpl implements BaeService {
   @Override
   public void answerQuestion(QuestionDTO questionDTO) throws Exception {
     baeMapper.answerQuestion(questionDTO);
+  }
+
+  @Override
+  public void updateCeoTpFollows(int followCnt, int ceoIdx) throws Exception {
+    baeMapper.updateCeoTpFollows(followCnt, ceoIdx);
   }
 }

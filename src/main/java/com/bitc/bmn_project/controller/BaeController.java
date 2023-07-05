@@ -4,15 +4,14 @@ import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.DTO.QuestionDTO;
 import com.bitc.bmn_project.service.BaeService;
+import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
@@ -21,8 +20,9 @@ public class BaeController {
   @Autowired
   private BaeService baeService;
 
+
   @RequestMapping(value = "/viewDetail/{ceoIdx}", method = RequestMethod.GET)
-  public ModelAndView viewDetail(@PathVariable("ceoIdx") int ceoIdx, HttpServletRequest req) throws Exception {
+  public ModelAndView viewDetail(@PathVariable("ceoIdx") int ceoIdx, HttpServletRequest req, @RequestParam(required = false, defaultValue = "1") int pageNum) throws Exception {
     ModelAndView mv = new ModelAndView("bmn/viewDetail");
 
     HttpSession session = req.getSession();
@@ -34,8 +34,14 @@ public class BaeController {
     String ceoStore = ceoDto.getCeoStore();
     int followCnt = baeService.getFollows(ceoStore);
 
-    // 문의 게시판
-    List<QuestionDTO> questionList = baeService.selectQuestionList(ceoIdx);
+    // 팔로워 수 ceoTp 연동
+    baeService.updateCeoTpFollows(followCnt, ceoIdx);
+
+    // 문의 게시판(페이징 처리)
+    PageInfo<QuestionDTO> questionList = new PageInfo<>(baeService.selectQuestionList(ceoIdx, pageNum), 5);
+
+    // 문의 게시판(페이징 전)
+//    List<QuestionDTO> questionList = baeService.selectQuestionList(ceoIdx, pageNum);
 
     session.setAttribute("customerIdx", 3);
     session.setAttribute("customerNick", "아이유");
@@ -47,7 +53,6 @@ public class BaeController {
     return mv;
   }
 
-
   @RequestMapping(value = "/login", method = RequestMethod.GET)
   public String login() throws Exception {
     return "bmn/login";
@@ -55,7 +60,7 @@ public class BaeController {
 
   @ResponseBody
   @RequestMapping(value = "/updateFollow", method = RequestMethod.PUT)
-  public Object updateFollow(@RequestParam("ceoStore") String ceoStore, @RequestParam("customerIdx") int customerIdx, HttpServletResponse resp) throws Exception {
+  public Object updateFollow(@RequestParam("ceoStore") String ceoStore, @RequestParam("customerIdx") int customerIdx) throws Exception {
     int result = 0;
 
     CustomerDTO customerDTO = baeService.selectCustomerInfo(customerIdx);
@@ -78,13 +83,22 @@ public class BaeController {
     return "redirect:/bmn/viewDetail/" + questionDTO.getCeoIdx();
   }
 
+  @ResponseBody
   // 문의하기에 대한 사장님 답변
   @RequestMapping(value = "/updateAnswer", method = RequestMethod.PUT)
   public String answerQuestion(QuestionDTO questionDTO) throws Exception {
     baeService.answerQuestion(questionDTO);
 
-    return "redirect:/bmn/viewDetail/" + questionDTO.getCeoIdx();
+    return "success";
+//    return "redirect:/bmn/viewDetail/" + questionDTO.getCeoIdx();
   }
 
+//  @ResponseBody
+//  @RequestMapping(value = "/viewDetail/{ceoIdx}", method = RequestMethod.POST)
+//  public String questionPageControll(@PathVariable("ceoIdx") int ceoIdx, @RequestParam("pageNum") int pageNum) throws Exception {
+//    PageInfo<QuestionDTO> questionList = new PageInfo<>(baeService.selectQuestionList(ceoIdx, pageNum), 5);
+//
+//    return "redirect:/bmn/viewDetail/" + ceoIdx;
+//  }
 }
 
