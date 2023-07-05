@@ -26,4 +26,14 @@ public class LeeServiceImpl implements LeeService{
     public ReservationDTO getReservationInfo(int customerIdx, int ceoIdx,  String reservationDate,int reservationTime) throws Exception {
         return leeMapper.getReservationInfo(customerIdx, ceoIdx, reservationDate, reservationTime);
     }
+
+    @Override
+    public List<ReservationDTO> selectDateReservation(int ceoIdx, String reservationDate) throws Exception {
+        return leeMapper.selectDateReservation(ceoIdx, reservationDate);
+    }
+
+    @Override
+    public ReservationDTO selectTimeReservation(String reservationDate, int ceoIdx, int reservationTime) throws Exception {
+        return leeMapper.selectTimeReservation(reservationDate, ceoIdx, reservationTime);
+    }
 }

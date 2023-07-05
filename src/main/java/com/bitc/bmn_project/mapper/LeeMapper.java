@@ -12,4 +12,8 @@ public interface LeeMapper {
     List<ReservationDTO> selectReservation(int ceoIdx) throws Exception;
 
     ReservationDTO getReservationInfo(int customerIdx, int ceoIdx, String reservationDate, int reservationTime) throws Exception;
+
+    List<ReservationDTO> selectDateReservation(int ceoIdx, String reservationDate) throws Exception;
+
+    ReservationDTO selectTimeReservation(String reservationDate, int ceoIdx, int reservationTime) throws Exception;
 }
