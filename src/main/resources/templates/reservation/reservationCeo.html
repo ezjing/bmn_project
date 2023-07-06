@@ -114,7 +114,7 @@
                             const tag2 = inputList[i];  // input 태그가 0번부터 출력됨....
                             const reservationTime = $(tag2).val();  // input 태그의 val값 가져옴
                             if (data == reservationTime) {    // 버튼이 가진 값과 예약완료된 버튼을 조회해야함(시간값으로 맞춰 가져옴).
-                                if (tag2.nextElementSibling.textContent.length == 5) {
+                                if (tag2.nextElementSibling.textContent.length == 5) {  // if문을 생각할땐 구분해야 하는 조건의 차이점을 신중히 생각하면 된다
                                     alert("예약 일정이 있는 시간을 선택해주세요.");
                                 }
                                 else {
