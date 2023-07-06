@@ -17,17 +17,27 @@ public class MainServiceImpl implements MainService{
     }
 
     @Override
-    public List<CeoDTO> searchList(String searchIdx) throws Exception {
-        return mainMapper.searchList(searchIdx);
+    public List<CeoDTO> storeLists(String keyWorld) throws Exception {
+        return mainMapper.storeLists(keyWorld);
     }
 
     @Override
-    public List<CeoDTO> storeLists() throws Exception {
-        return mainMapper.storeLists();
+    public List<CeoDTO> followLists(String keyWorld) throws Exception {
+        return mainMapper.followLists(keyWorld);
     }
 
     @Override
-    public List<CeoDTO> followLists() throws Exception {
-        return mainMapper.followLists();
+    public List<CeoDTO> selectJFoods() throws Exception {
+        return mainMapper.selectJFoods();
+    }
+
+    @Override
+    public List<CeoDTO> selectCFoods() throws Exception {
+        return mainMapper.selectCFoods();
+    }
+
+    @Override
+    public List<CeoDTO> selectWFoods() throws Exception {
+        return mainMapper.selectWFoods();
     }
 }

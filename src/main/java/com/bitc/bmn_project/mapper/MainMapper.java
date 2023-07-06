@@ -7,12 +7,16 @@ import java.util.List;
 
 @Mapper
 public interface MainMapper {
+    List<CeoDTO> storeLists(String keyWorld) throws Exception;
+
+    List<CeoDTO> followLists(String keyWorld) throws Exception;
+
     // 한식
     List<CeoDTO> selectKFood() throws Exception;
-
-    List<CeoDTO> searchList(String searchIdx) throws Exception;
-
-    List<CeoDTO> storeLists() throws Exception;
-
-    List<CeoDTO> followLists() throws Exception;
+    // 일식
+    List<CeoDTO> selectJFoods() throws Exception;
+    // 중식
+    List<CeoDTO> selectCFoods() throws Exception;
+    // 양식
+    List<CeoDTO> selectWFoods() throws Exception;
 }

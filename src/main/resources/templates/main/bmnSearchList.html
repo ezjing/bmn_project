@@ -25,7 +25,7 @@
             </nav>
         </div>
         <div class="col-sm-6 input-group pt-3 pb-3 w-50" >
-            <input type="search" class="form-control me-3">
+            <input type="search" class="form-control me-3" th:value="${keyWorld}">
             <a href="#" class="btn btn-primary">검색</a>
         </div>
         <div class="col-sm-4 btn-group justify-content-center">
@@ -94,9 +94,10 @@
             </div>
         </div>
         <div class="col-sm-8">
+            <!-- 검색 List -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
                             role="tab" aria-controls="home" aria-selected="true">평점 순
                     </button>
                 </li>
@@ -112,7 +113,7 @@
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <p class="fs-5 fw-bold">#평점 순</p>
                     <div class="list-group" th:if="${#lists.size(storeList)} > 0" th:each="item : ${storeList}">
                         <a href="#" class="list-group-item list-group-item-action">

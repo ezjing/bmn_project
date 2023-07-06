@@ -7,9 +7,13 @@ import java.util.List;
 public interface MainService {
     List<CeoDTO> selectKFood() throws Exception;
 
-    List<CeoDTO> searchList(String searchIdx) throws Exception;
+    List<CeoDTO> storeLists(String keyWorld) throws Exception;
 
-    List<CeoDTO> storeLists() throws Exception;
+    List<CeoDTO> followLists(String keyWorld) throws Exception;
 
-    List<CeoDTO> followLists() throws Exception;
+    List<CeoDTO> selectJFoods() throws Exception;
+
+    List<CeoDTO> selectCFoods() throws Exception;
+
+    List<CeoDTO> selectWFoods() throws Exception;
 }

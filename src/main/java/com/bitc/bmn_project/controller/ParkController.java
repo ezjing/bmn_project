@@ -17,27 +17,42 @@ public class ParkController {
     @Autowired
     private MainService mainService;
     @RequestMapping(value = "/bmnMain", method = RequestMethod.GET)
-    public ModelAndView bmnMain() throws Exception{
+    public ModelAndView bmnMainGet() throws Exception{
         ModelAndView mv = new ModelAndView("main/bmnMain");
         List<CeoDTO> coeDtoList = mainService.selectKFood();
+        List<CeoDTO> selectJFood = mainService.selectJFoods();
+        List<CeoDTO> selectCFood = mainService.selectCFoods();
+        List<CeoDTO> selectWFood = mainService.selectWFoods();
 
+        // 한식 List
         mv.addObject("ceoDtoList",coeDtoList);
+        // 일식 List
+        mv.addObject("selectJFood",selectJFood);
+        // 중식 List
+        mv.addObject("selectCFood",selectCFood);
+        // 양식 List
+        mv.addObject("selectWFood",selectWFood);
         return mv;
     }
 
     @RequestMapping(value="/bmnSearchList", method = RequestMethod.GET)
-    public ModelAndView searchList(@Param("searchIdx") String searchIdx) throws Exception{
+    public ModelAndView searchListGet(@Param("keyWorld") String keyWorld) throws Exception{
         ModelAndView mv = new ModelAndView("main/bmnSearchList");
+        // keyWorld 값 가져 오는 지 확인
 
-//        List<CeoDTO> searchList = mainService.searchList(searchIdx);
-//        mv.addObject("searchList",searchList);
-
-        // 평점 순위 리스트
-        List<CeoDTO> storeList = mainService.storeLists();
-        List<CeoDTO> followList = mainService.followLists();
+        // 평점 순위 검색 리스트
+        List<CeoDTO> storeList = mainService.storeLists(keyWorld);
+        // 팔로우 순위 검색 리스트
+        List<CeoDTO> followList = mainService.followLists(keyWorld);
 
         mv.addObject("storeList",storeList);
         mv.addObject("followList",followList);
+        mv.addObject("keyWorld",keyWorld);
         return mv;
+    }
+
+    @RequestMapping(value="/bmnSearchList", method = RequestMethod.POST)
+    public void searchListPost() throws Exception{
+
     }
 }
