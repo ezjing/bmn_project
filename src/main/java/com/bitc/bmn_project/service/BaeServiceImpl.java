@@ -1,9 +1,6 @@
 package com.bitc.bmn_project.service;
 
-import com.bitc.bmn_project.DTO.CeoDTO;
-import com.bitc.bmn_project.DTO.CustomerDTO;
-import com.bitc.bmn_project.DTO.QuestionDTO;
-import com.bitc.bmn_project.DTO.ReviewDTO;
+import com.bitc.bmn_project.DTO.*;
 import com.bitc.bmn_project.mapper.BaeMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -78,8 +75,20 @@ public class BaeServiceImpl implements BaeService {
   }
 
   @Override
-  public List<ReviewDTO> selectReviewList(int ceoIdx) throws Exception {
-    List<ReviewDTO> reviewList = baeMapper.selectReviewList(ceoIdx);
+  public List<ReviewJoinDTO> selectReviewList(int ceoIdx) throws Exception {
+    List<ReviewJoinDTO> reviewList = baeMapper.selectReviewList(ceoIdx);
+
     return reviewList;
+  }
+
+  @Override
+  public void reviewDelete(int reviewIdx) throws Exception {
+    baeMapper.reviewDelete(reviewIdx);
+  }
+
+  @Override
+  public List<CommentJoinDTO> selectCommentList(int ceoIdx) throws Exception {
+    List<CommentJoinDTO> commentList = baeMapper.selectCommentList(ceoIdx);
+    return commentList;
   }
 }

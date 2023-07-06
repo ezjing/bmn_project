@@ -1,9 +1,6 @@
 package com.bitc.bmn_project.mapper;
 
-import com.bitc.bmn_project.DTO.CeoDTO;
-import com.bitc.bmn_project.DTO.CustomerDTO;
-import com.bitc.bmn_project.DTO.QuestionDTO;
-import com.bitc.bmn_project.DTO.ReviewDTO;
+import com.bitc.bmn_project.DTO.*;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,5 +30,9 @@ public interface BaeMapper {
 
   int getReviewCnt(int ceoIdx) throws Exception;
 
-  List<ReviewDTO> selectReviewList(int ceoIdx) throws Exception;
+  List<ReviewJoinDTO> selectReviewList(int ceoIdx) throws Exception;
+
+  void reviewDelete(int reviewIdx) throws Exception;
+
+  List<CommentJoinDTO> selectCommentList(int ceoIdx) throws Exception;
 }

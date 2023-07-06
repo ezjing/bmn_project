@@ -78,15 +78,35 @@
 	</select>
 	
 <!--	리뷰 리스트 가져오기-->
-	<select id="selectReviewList" parameterType="int" resultType="com.bitc.bmn_project.DTO.ReviewDTO">
+	<select id="selectReviewList" parameterType="int" resultType="com.bitc.bmn_project.DTO.ReviewJoinDTO">
 		SELECT
-			review_idx, customer_idx, customer_nick, review_title, review_contents, review_img, review_date, review_score
+			R.review_idx, R.customer_idx, R.customer_nick, R.ceo_idx, R.review_title, R.review_contents, R.review_img,
+			R.review_date, R.review_score, R.review_delete, RT.review_tag_idx, RT.review_tag1, RT.review_tag2, RT.review_tag3, RT.review_tag4, RT.review_tag5, RT.review_tag6, RT.review_tag7, RT.review_tag8
 		FROM
-			review_tp
+			review_tp R JOIN review_tag_tp RT ON(R.review_idx = RT.review_idx)
 		WHERE
-			ceo_idx = 70 AND review_delete = 'N'
+			ceo_idx = #{ceoIdx} AND review_delete = 'N'
 		ORDER BY
 			review_idx DESC
+	</select>
+	
+	
+<!--	관리자 리뷰 삭제-->
+	<update id="reviewDelete" parameterType="int">
+		UPDATE review_tp SET review_delete = 'Y' WHERE review_idx = #{reviewIdx}
+	</update>
+	
+<!--	리뷰에 달린 댓글 리스트 가져오기-->
+	<select id="selectCommentList" parameterType="int" resultType="com.bitc.bmn_project.DTO.CommentJoinDTO">
+		SELECT
+			COM.comment_idx, COM.review_idx, COM.ceo_idx, COM.customer_idx, COM.comment_contents, COM.comment_date,
+			CUS.customer_nick
+		FROM
+			comment_tp COM JOIN customer_tp CUS ON (COM.customer_idx = CUS.customer_idx)
+		WHERE
+			ceo_idx = #{ceoIdx} AND comment_delete = 'N'
+		ORDER BY
+			comment_idx DESC
 	</select>
 	
 	
