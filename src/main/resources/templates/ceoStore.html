@@ -38,8 +38,8 @@
             document.form.ceoFullAddress.value = roadFullAddr;
             document.form.ceoCityAddress.value = sggNm;
             //
-            document.form.entX.value = result.y.toFixed(6);
-            document.form.entY.value = result.x.toFixed(6);
+            document.getElementById("entX").value = result.y.toFixed(6);
+            document.getElementById("entY").value = result.x.toFixed(6);
         }
 
 
@@ -66,12 +66,12 @@
         $(document).ready(function () {
             // 서브밋 시 스마트 에디터의 밸류 확인
             $("#submit-btn").on("click", function () {
-                console.log($("#contents").val());
+                console.log($("#ceoContents").val());
 
-                oEditors.getById["contents"].exec("UPDATE_CONTENTS_FIELD", []);
+                oEditors.getById["ceoContents"].exec("UPDATE_CONTENTS_FIELD", []);
 
                 // 에디터의 내용에 대한 값 검증은 이곳에서
-                // document.getElementById("contents").value를 이용해서 처리한다.
+                // document.getElementById("ceoContents").value를 이용해서 처리한다.
 
                 try {
                     $("#form").submit();
@@ -131,10 +131,10 @@
 <body>
 <div class="container-sm my-4">
     <div class="col-sm-10 mx-auto">
-        <form name="form" id="form" action="ceoStore/addStore" method="post" class="form-control" enctype="multipart/form-data">
-            <h2 class="text-center my-4">식당 등록</h2>
+        <form name="form" id="form" action="ceoStore/addStore" method="post" class="form-control" enctype="multipart/form-data" novalidate>
+            <h2 class="text-center my-4">가게 등록</h2>
             <div>
-                <!-- 사장이 직접 입력하는 정보-->
+                <!-- 정보 입력 -->
                 <div class="row">
                     <div class="my-2">
                         <span>가게 이름</span>
@@ -188,7 +188,7 @@
                     </div>
                     <div class="col">
                         <label for="ceo-thumbnail-img">가게 홍보 이미지</label>
-                        <input type="file" class="form-control" id="ceo-thumbnail-img" name="ceoThumbnailImg">
+                        <input type="file" class="form-control" id="ceo-thumbnail-img" name="ceoThumbnailImgFile" accept="image/jpeg" required>
                     </div>
                 </div>
 
@@ -200,13 +200,13 @@
                     </div>
                     <div class="col">
                         <label for="ceo-main-img">대표 메뉴 이미지</label>
-                        <input type="file" class="form-control" id="ceo-main-img" name="ceoMainImg" >
+                        <input type="file" class="form-control" id="ceo-main-img" name="ceoMainImgFile" accept="image/jpeg" required>
                     </div>
                 </div>
                 <div class="my-2">
                     <span>가게 소개글</span>
                     <!-- 스마트 에디터 -->
-                    <textarea name="contents" id="contents" rows="10" cols="100"></textarea>
+                    <textarea name="ceoContents" id="ceoContents" rows="10" cols="100"></textarea>
                 </div>
 
                 <div class="my-2">메뉴 등록<small> (최대 6개)</small>
@@ -242,18 +242,18 @@
                         </td>
                         <td class="px-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="ceo-detail-menu1" name="ceoDetailMenu1">
+                                <input type="text" class="form-control" id="ceo-detail-menu1" name="ceoDetailMenu1" accept="image/jpeg">
                                 <label for="ceo-detail-menu1" class="ms-2">메뉴1 이름(가격) / ex) 돈까스(7,000원)</label>
                             </div>
                         </td>
                         <td class="px-3">
                             <div>
                                 <label for="ceo-menu-img1">메뉴1 이미지</label>
-                                <input type="file" class="form-control" id="ceo-menu-img1" name="ceoMenuImg1">
+                                <input type="file" class="form-control" id="ceo-menu-img1" name="files">
                             </div>
                         </td>
                     </tr>
-                    <tr id="menu2" class="menuItems">
+                    <tr id="menu2" class="menuItems" hidden="hidden">
                         <td class="text-center align-middle">
                             <button type="button" class="btn btn-outline-danger" value="2"
                                     onclick="hiddenItem(this.value)">
@@ -265,18 +265,18 @@
                         </td>
                         <td class="px-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="ceo-detail-menu2" name="ceoDetailMenu2">
+                                <input type="text" class="form-control" id="ceo-detail-menu2" name="ceoDetailMenu2" accept="image/jpeg">
                                 <label for="ceo-detail-menu2" class="ms-2">메뉴2 이름(가격) / ex) 돈까스(7,000원)</label>
                             </div>
                         </td>
                         <td class="px-3">
                             <div>
                                 <label for="ceo-menu-img2">메뉴2 이미지</label>
-                                <input type="file" class="form-control" id="ceo-menu-img2" name="ceoMenuImg2">
+                                <input type="file" class="form-control" id="ceo-menu-img2" name="files">
                             </div>
                         </td>
                     </tr>
-                    <tr id="menu3" class="menuItems">
+                    <tr id="menu3" class="menuItems" hidden="hidden">
                         <td class="text-center align-middle">
                             <button type="button" class="btn btn-outline-danger" value="3"
                                     onclick="hiddenItem(this.value)">
@@ -288,18 +288,18 @@
                         </td>
                         <td class="px-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="ceo-detail-menu3" name="ceoDetailMenu3">
+                                <input type="text" class="form-control" id="ceo-detail-menu3" name="ceoDetailMenu3" accept="image/jpeg">
                                 <label for="ceo-detail-menu3" class="ms-2">메뉴3 이름(가격) / ex) 돈까스(7,000원)</label>
                             </div>
                         </td>
                         <td class="px-3">
                             <div>
                                 <label for="ceo-menu-img3">메뉴3 이미지</label>
-                                <input type="file" class="form-control" id="ceo-menu-img3" name="ceoMenuImg3">
+                                <input type="file" class="form-control" id="ceo-menu-img3" name="files">
                             </div>
                         </td>
                     </tr>
-                    <tr id="menu4" class="menuItems">
+                    <tr id="menu4" class="menuItems" hidden="hidden">
                         <td class="text-center align-middle">
                             <button type="button" class="btn btn-outline-danger" value="4"
                                     onclick="hiddenItem(this.value)">
@@ -311,18 +311,18 @@
                         </td>
                         <td class="px-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="ceo-detail-menu4" name="ceoDetailMenu4">
+                                <input type="text" class="form-control" id="ceo-detail-menu4" name="ceoDetailMenu4" accept="image/jpeg">
                                 <label for="ceo-detail-menu4" class="ms-2">메뉴4 이름(가격) / ex) 돈까스(7,000원)</label>
                             </div>
                         </td>
                         <td class="px-3">
                             <div>
                                 <label for="ceo-menu-img4">메뉴4 이미지</label>
-                                <input type="file" class="form-control" id="ceo-menu-img4" name="ceoMenuImg4">
+                                <input type="file" class="form-control" id="ceo-menu-img4" name="files">
                             </div>
                         </td>
                     </tr>
-                    <tr id="menu5" class="menuItems">
+                    <tr id="menu5" class="menuItems" hidden="hidden">
                         <td class="text-center align-middle">
                             <button type="button" class="btn btn-outline-danger" value="5"
                                     onclick="hiddenItem(this.value)">
@@ -334,18 +334,18 @@
                         </td>
                         <td class="px-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="ceo-detail-menu5" name="ceoDetailMenu5">
+                                <input type="text" class="form-control" id="ceo-detail-menu5" name="ceoDetailMenu5" accept="image/jpeg">
                                 <label for="ceo-detail-menu5" class="ms-2">메뉴5 이름(가격) / ex) 돈까스(7,000원)</label>
                             </div>
                         </td>
                         <td class="px-3">
                             <div>
                                 <label for="ceo-menu-img5">메뉴5 이미지</label>
-                                <input type="file" class="form-control" id="ceo-menu-img5" name="ceoMenuImg5">
+                                <input type="file" class="form-control" id="ceo-menu-img5" name="files">
                             </div>
                         </td>
                     </tr>
-                    <tr id="menu6" class="menuItems">
+                    <tr id="menu6" class="menuItems" hidden="hidden">
                         <td class="text-center align-middle">
                             <button type="button" class="btn btn-outline-danger" value="6"
                                     onclick="hiddenItem(this.value)">
@@ -357,14 +357,14 @@
                         </td>
                         <td class="px-4">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="ceo-detail-menu6" name="ceoDetailMenu6">
+                                <input type="text" class="form-control" id="ceo-detail-menu6" name="ceoDetailMenu6" accept="image/jpeg">
                                 <label for="ceo-detail-menu6" class="ms-2">메뉴6 이름(가격) / ex) 돈까스(7,000원)</label>
                             </div>
                         </td>
                         <td class="px-3">
                             <div>
                                 <label for="ceo-menu-img6">메뉴6 이미지</label>
-                                <input type="file" class="form-control" id="ceo-menu-img6" name="ceoMenuImg6">
+                                <input type="file" class="form-control" id="ceo-menu-img6" name="files">
                             </div>
                         </td>
                     </tr>
@@ -383,8 +383,8 @@
                     <label for="roadFullAddr" class="from-label"><small>도시명(시, 군, 구)</small></label>
                     <input type="text" id="sggNm" name="ceoCityAddress" class="form-control" readonly/>
 
-                    <input type="hidden" style="width:500px;" id="entX" name="entX"/><br>
-                    <input type="hidden" style="width:500px;" id="entY" name="entY"/>
+                    <input type="hidden" id="entX" name="ceoLat"/><br>
+                    <input type="hidden" id="entY" name="ceoLon"/>
                 </div>
             </div>
             <button id="submit-btn" type="submit" class="btn btn-primary">확인 버튼</button>
@@ -397,7 +397,7 @@
     nhn.husky.SE2M_AttachQuickPhoto = true;
     nhn.husky.EZCreator.createInIFrame({
         oAppRef: oEditors,
-        elPlaceHolder: "contents",
+        elPlaceHolder: "ceoContents",
         sSkinURI: "/se2/SmartEditor2Skin.html",
         fCreator: "createSEditor2"
 

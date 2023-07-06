@@ -3,11 +3,15 @@ package com.bitc.bmn_project.controller;
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.service.SimService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/bmn")
@@ -20,6 +24,95 @@ public class SimController {
     @RequestMapping("/")
     public String index() throws Exception {
         return "index";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String doLoginView() throws Exception {
+
+        return "login";
+    }
+
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String doLoginProcess(@RequestParam String userId,
+                                 @RequestParam String userPw,
+                                 HttpServletRequest req) throws Exception {
+        String returnUrl = req.getRequestURI();
+        System.out.println("userId : " + userId + ", userPw :" + userPw + ", returnUrl :" + returnUrl);
+
+        int result = 0;
+        int grade = 0;
+        // 1. DB에 존재하는지 확인(ID 만)
+        int isUser = simService.isUser(userId);
+
+        HttpSession session = req.getSession();
+        session.setMaxInactiveInterval(60);
+        CustomerDTO customer;
+        CeoDTO ceo;
+
+        // 없는 ID일 경우 메시지 리턴
+        if (isUser == 0) {
+            session.setAttribute("failMsg", "존재하지 않는 아이디입니다.");
+            session.setMaxInactiveInterval(1);
+            return "redirect:" + returnUrl;
+        }
+
+        //
+        // 2-1-1. 손님 DB에 데이터 존재하는지 확인
+        // 2-1-2. 관리자인지 확인()
+        int who = simService.isCustomer(userId, userPw);
+        if (who != 0) {
+            grade = simService.getGrade(userId);
+        }
+
+        switch (grade) {
+            // 손님이 아님(사장이거나, 로그인 실패)
+            // 2-2. 사장님 DB에 데이터 존재하는지 확인
+            case 0 -> result = simService.isCeo(userId, userPw);
+
+            // 3-1 로그인 성공 일반회원
+            // 3-2 로그인 성공 우수회원
+            case 1, 2 -> {
+                customer = simService.getCustomerInfo(userId);
+                session.setAttribute("user", customer);
+                session.removeAttribute("failMsg");
+
+                return "redirect:" + returnUrl;
+            }
+
+            // 3-3 로그인 성공 관리자
+            case 10 -> {
+                session.setAttribute("user", "admin");
+                session.removeAttribute("failMsg");
+                return "redirect:" + returnUrl;
+            }
+
+        }
+
+        // 로직 조정 필요
+        if (result == 1) { // 3-4 로그인 성공 사장님
+            ceo = simService.getCeoInfo(userId);
+            session.setAttribute("user", ceo);
+            session.removeAttribute("failMsg");
+        } else {
+            // 실패시 메시지 전송
+            session.setAttribute("failMsg", "비밀번호가 틀렸습니다.");
+            session.setMaxInactiveInterval(1);
+        }
+        return "redirect:" + returnUrl;
+
+    }
+
+
+    @RequestMapping("/logOut")
+    public String doLogOut(HttpServletRequest req) throws Exception {
+
+
+        HttpSession session = req.getSession();
+        session.invalidate();
+
+        // 로그아웃 후 메인으로
+        return "redirect:/bmn/login";
     }
 
     @RequestMapping("/signUp/customer")
@@ -71,7 +164,7 @@ public class SimController {
     }
 
     @RequestMapping("/ceoStore")
-    public String doTest() throws Exception {
+    public String doCeoStore() throws Exception {
 
         return "ceoStore";
     }
@@ -147,20 +240,18 @@ public class SimController {
         return mv;
     }
 
-
     @RequestMapping(value = "/ceoStore/addStore", method = RequestMethod.POST)
-    public String doAddStore(CeoDTO store, MultipartHttpServletRequest multipart) throws Exception {
-        // 1. 사용자가 입력한 내용을 전달받음
-        // 2. 서비스를 이용하여 DB에 insert
-        // 3. 목록 페이지로 리다이렉트
-
-        // 클라이언트에서 전달받은 데이터를 매개변수로 하여 서비스의 insertBoard() 메소드 실행
-        // 전달받은 파일 정보를 처리하기 위해서 서비스의 insertBoard 메소드에
-        // MultiPartHttpServletRequest 타입의 매개변수가 추가됨
+    public String doAddStore(CeoDTO store,
+                             @RequestParam("ceoMainImgFile") MultipartFile mainImage,
+                             @RequestParam("ceoThumbnailImgFile") MultipartFile thumbnail,
+                             @RequestParam(value = "files", required = false) List<MultipartFile> files
+    ) throws Exception {
         System.out.println(store);
-        System.out.println(multipart);
+        System.out.println(mainImage);
+        System.out.println(thumbnail);
+        System.out.println(files);
 
-//        simService.addStore(store, multipart);
+        simService.addStore(store, mainImage, thumbnail, files);
 
         return "redirect:/bmn/";
     }
