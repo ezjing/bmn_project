@@ -74,7 +74,7 @@
 		FROM
 			review_tp
 		WHERE
-			ceo_idx = #{ceoIdx}
+			ceo_idx = #{ceoIdx} AND review_delete = 'N'
 	</select>
 	
 <!--	리뷰 리스트 가져오기-->
@@ -108,6 +108,14 @@
 		ORDER BY
 			comment_idx DESC
 	</select>
+	
+<!--	리뷰에 댓글 달기-->
+	<insert id="commentInsert" parameterType="com.bitc.bmn_project.DTO.CommentJoinDTO">
+		INSERT INTO
+			comment_tp (review_idx, ceo_idx, customer_idx, comment_contents, comment_date)
+		VALUES
+			(#{reviewIdx}, #{ceoIdx}, #{customerIdx}, #{commentContents}, NOW())
+	</insert>
 	
 	
 <!--	문의리스트 조회-->

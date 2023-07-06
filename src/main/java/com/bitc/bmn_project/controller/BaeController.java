@@ -123,12 +123,27 @@ public class BaeController {
 //  }
 
 
-
-  @RequestMapping(value = "/login", method = RequestMethod.GET)
-  public String login() throws Exception {
-    return "bmn/login";
+  // 리뷰에 댓글 달기
+  @ResponseBody
+  @RequestMapping(value = "/commentInsert", method = RequestMethod.POST)
+  public Object commentInsert(CommentJoinDTO commentJoinDTO) throws Exception {
+    baeService.commentInsert(commentJoinDTO);
+    return "success";
   }
 
+
+
+  // 관리자 리뷰 삭제
+  @ResponseBody
+  @RequestMapping(value = "/reviewDelete", method = RequestMethod.DELETE)
+  public Object reviewDelete(@RequestParam("reviewIdx") int reviewIdx) throws Exception {
+    baeService.reviewDelete(reviewIdx);
+
+    return "success";
+  }
+
+  
+  // 팔로우 추가/삭제
   @ResponseBody
   @RequestMapping(value = "/updateFollow", method = RequestMethod.PUT)
   public Object updateFollow(@RequestParam("ceoStore") String ceoStore, @RequestParam("customerIdx") int customerIdx) throws Exception {
@@ -147,7 +162,7 @@ public class BaeController {
     return result;
   }
 
-  // 문의하기
+  // 사장님에게 문의하기
   @RequestMapping(value = "/insertQuestion", method = RequestMethod.POST)
   public String insertQuestion(QuestionDTO questionDTO) throws Exception {
     baeService.insertQuestion(questionDTO);
@@ -166,6 +181,7 @@ public class BaeController {
 //    return "redirect:/bmn/viewDetail/" + questionDTO.getCeoIdx();
   }
 
+  // 페이징 처리를 위한 PageInfo 타입 리스트 가져오기
   @ResponseBody
   @RequestMapping(value = "/viewDetail/{ceoIdx}", method = RequestMethod.POST)
   public Object questionPageControll(@PathVariable("ceoIdx") int ceoIdx, @RequestParam("pageNum") int pageNum) throws Exception {
@@ -173,16 +189,7 @@ public class BaeController {
 
     return questionList;
   }
-
-
-  // 관리자 리뷰 삭제
-  @ResponseBody
-  @RequestMapping(value = "/reviewDelete", method = RequestMethod.DELETE)
-  public Object reviewDelete(@RequestParam("reviewIdx") int reviewIdx) throws Exception {
-    baeService.reviewDelete(reviewIdx);
-
-    return "success";
-  }
+  
 }
 
 

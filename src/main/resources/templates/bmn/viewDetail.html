@@ -19,8 +19,8 @@
     }
     
     #map2 {
-      width: 100%;
-      height: 500px;
+      width: 1100px;
+      height: 600px;
     }
     
     #left-remote {
@@ -68,7 +68,7 @@
       
       var mapOptions = {
         center: new naver.maps.LatLng(lat, lon),
-        zoom: 10
+        zoom: 15
       }
       
       var map1 = new naver.maps.Map('map1', mapOptions);
@@ -94,7 +94,6 @@
         const ceoStore = $("#ceoStore").val();
         const customerIdx = $("#customerIdx").val();
         
-        
         $.ajax({
           url: "/bmn/updateFollow",
           type: "PUT",
@@ -111,7 +110,7 @@
       });
       
       
-      // id값으로 하게되면 반복되는 리스트 형태로, id가 겹치는 문제 발생하기 때문에 class로 버튼 찾음
+      // id값으로 하게되면 반복되는 리스트 형태로, id가 겹치는 문제 발생하기 때문에 class타입 선택자 사용
       $(".btn-question-answer").on('click', function () {
         // $(this)로 반복되는 버튼 중에 클릭한 버튼을 가져옴
         // parent() : 부모 태그 가져옴
@@ -189,6 +188,27 @@
         }
       });
       
+      // 리뷰에 댓글 달기
+      $(".btn-review-comment").on('click', function () {
+        const frm = $(this).parent().parent();
+        const reviewIdx = frm.children(".review-idx").val();
+        const customerIdx = frm.children(".customer-idx").val();
+        const commentContents = frm.find(".commentContents").val();
+        const ceoIdx = $("#ceoIdx").val();
+        
+        $.ajax({
+          url: "/bmn/commentInsert",
+          type: "POST",
+          data: {reviewIdx: reviewIdx, customerIdx: customerIdx, commentContents: commentContents, ceoIdx: ceoIdx},
+          success: function (data) {
+            location.reload();
+          },
+          error: function () {
+            alert("ajax 통신 실패");
+          }
+        });
+      });
+      
     });
   
   </script>
@@ -205,8 +225,8 @@
         <div class="border my-2" data-bs-toggle="modal" data-bs-target="#map-modal" id="map1"></div>
         <input type="hidden" id="ceo-lat" th:value="${ceoDto.ceoLat}">
         <input type="hidden" id="ceo-lon" th:value="${ceoDto.ceoLon}">
-        <a href="#" class="btn btn-secondary my-2">예약하기</a>
-        <div class="border rounded-2 p-2">예약정보 구역</div>
+        <a href="#" class="btn btn-secondary my-2">식당 예약하기</a>
+<!--        <div class="border rounded-2 p-2">예약정보 구역</div>-->
       </div>
       <div class="col-sm-8"></div>
       <!--        오른쪽 리모컨-->
@@ -235,8 +255,9 @@
           <input type="hidden" id="ceoIdx" th:value="${ceoDto.ceoIdx}">
           <input type="hidden" id="customerIdx" th:value="${session.customerIdx}">
           <br><br>
-          <span th:text="${ceoDto.ceoCategory}" class="rounded-5 border p-3 me-3">카테고리</span>
-          <span th:text="|평점 : ${ceoDto.ceoScore}점|" class="rounded-5 border p-3" style="width: 100px"></span>
+          <span th:text="${ceoDto.ceoCategory}" class="rounded-5 border border-primary p-3 me-3">카테고리</span>
+          <span th:text="|평점 : ${ceoDto.ceoScore}점|" class="rounded-5 border border-primary p-3"
+                style="width: 100px"></span>
           <div class="card mt-5" style="width: 40rem;">
             <img th:src="${ceoDto.ceoMenuImg1}" class="card-img-top" alt="등록된 이미지가 없습니다.">
             <div class="card-body">
@@ -348,24 +369,39 @@
                 <img th:src="${item.reviewImg}" alt="이미지를 불러올 수 없습니다." style="width: 300px; height: 200px;">
               </div>
             </div>
+            <button class="btn btn-outline-primary ms-4" data-bs-toggle="collapse" data-bs-target="#commentCollapse"
+               th:attrappend="data-bs-target=${itemStat.index}">
+              <i class="bi bi-chat-left-dots-fill" style="font-size: 20px"></i>
+              <span>댓글 보기</span>
+            </button>
             
-<!--            <div class="m-3 rounded-3 p-2" th:each="comment : ${commentList}">-->
-<!--              <div th:if="${comment.reviewIdx == item.reviewIdx}">-->
-<!--                <input type="text" class="form-control comment-write" th:value="${comment.commentContents}">-->
-<!--              </div>-->
-<!--              <div th:unless="${comment.reviewIdx == item.reviewIdx}">-->
-<!--                <p>등록된 댓글이 없습니다.</p>-->
-<!--              </div>-->
-<!--            </div>-->
-  
-            <div class="m-3 rounded-3 p-2" th:each="comment : ${commentList}" th:if="${comment.reviewIdx == item.reviewIdx}">
-              <span th:text="|${comment.customerNick}님|" class="fw-bold"></span>
-              <span th:text="|[${comment.commentDate}]|" style="font-size: 14px"></span>
-              <input type="text" class="form-control comment-write" th:value="${comment.commentContents}">
+            <hr class="mt-3">
+            
+            <div class="collapse" id="commentCollapse" th:attrappend="id=${itemStat.index}">
+              <div class="m-3 rounded-3 p-2" th:each="comment : ${commentList}" th:if="${comment.reviewIdx == item.reviewIdx}" >
+                <span th:text="|${comment.customerNick}님|" class="fw-bold"></span>
+                <span th:text="|[${comment.commentDate}]|" style="font-size: 14px"></span>
+                <input type="text" class="form-control comment-write" th:value="${comment.commentContents}">
+              </div>
+              <hr>
+              <form method="post" class="row mx-3">
+                <div class="col-sm-11 d-flex align-items-center">
+                  <input type="text" class="form-control commentContents" name="commentContents">
+                </div>
+                <div class="col-sm-1">
+                  <button type="button" class="btn btn-review-comment">
+                    <i class="bi bi-pencil-square" style="font-size:2rem"></i>
+                  </button>
+                </div>
+                <input type="hidden" class="review-idx" name="reviewIdx" th:value="${item.reviewIdx}">
+                <input type="hidden" class="customer-idx" name="customerIdx" th:value="${session.customerIdx}">
+              </form>
             </div>
+
+
           </div>
           <div class="border rounded-3 my-3" th:unless="${#lists.size(reviewList)} > 0">
-            <p class="pt-3 ms-3">등록된 리뷰가 없습니다.</p>
+            <p class="pt-3 ms-3 text-center">#등록된 리뷰가 없습니다.</p>
           </div>
         </div>
         
@@ -443,7 +479,8 @@
                     <input type="text" class="form-control answerContents" name="answerContents">
                   </div>
                   <div class="col-sm-1">
-                    <button type="button" class="btn btn-question-answer"><i class="bi bi-pencil-square" style="font-size:2rem"></i>
+                    <button type="button" class="btn btn-question-answer">
+                      <i class="bi bi-pencil-square" style="font-size:2rem"></i>
                     </button>
                   </div>
                   <input type="hidden" class="questionIdx" name="questionIdx" th:value="${item.questionIdx}">
@@ -451,71 +488,8 @@
                 </form>
               </div>
             </div>
-  
-  
-            <!--            페이징 전 문의목록 -->
-  
-            <!--            <div th:if="${#lists.size(questionList)}>0" th:each="item : ${questionList}">-->
-            <!--              <div class="row text-center border border-top-0">-->
-            <!--                <div class="col-sm-1">-->
-            <!--                  <p class="mt-3" th:text="${item.questionIdx}"></p>-->
-            <!--                </div>-->
-            <!--                <div class="col-sm-2">-->
-            <!--                  <p class="mt-3" th:text="${item.questionComplete}"-->
-            <!--                     th:attrappend="class=${item.questionComplete == '답변완료' ? ' text-muted' : ' fw-bold'}"></p>-->
-            <!--                </div>-->
-            <!--                <div class="col-sm-5 d-flex align-items-center">-->
-            <!--                  <a href="#question-detail" th:attrappend="href=${itemStat.index}"-->
-            <!--                     class="text-decoration-none text-black" data-bs-toggle="collapse"-->
-            <!--                     th:text="${item.questionTitle}"></a>-->
-            <!--                </div>-->
-            <!--                <div class="col-sm-2">-->
-            <!--                  <p class="mt-3" th:text="${item.customerNick}"></p>-->
-            <!--                </div>-->
-            <!--                <div class="col-sm-2">-->
-            <!--                  <p class="mt-3" th:text="${item.questionDate}"></p>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--              <div class="collapse" id="question-detail" th:attrappend="id=${itemStat.index}">-->
-            <!--                <div class="row border border-top-0">-->
-            <!--                  <div class="col-sm-2">-->
-            <!--                    <p class="m-3">[문의내용]</p>-->
-            <!--                  </div>-->
-            <!--                  <div class="col-sm-10">-->
-            <!--                    <p class="m-3" th:text="${item.questionContents}"></p>-->
-            <!--                  </div>-->
-            <!--                </div>-->
-            <!--                <div class="row border border-top-0" th:if="${item.answerContents != null}">-->
-            <!--                  <div class="col-sm-2">-->
-            <!--                    <p class="m-3">[답변내용]</p>-->
-            <!--                  </div>-->
-            <!--                  <div class="col-sm-8">-->
-            <!--                    <p class="m-3" th:text="${item.answerContents}"></p>-->
-            <!--                  </div>-->
-            <!--                  <div class="col-sm-2">-->
-            <!--                    <p class="m-3" th:text="${item.answerDate}"></p>-->
-            <!--                  </div>-->
-            <!--                </div>-->
-            <!--                <form method="post" class="row border border-top-0" th:unless="${item.answerContents != null}">-->
-            <!--                  <div class="col-sm-2">-->
-            <!--                    <p class="m-3">[답변내용]</p>-->
-            <!--                  </div>-->
-            <!--                  <div class="col-sm-9 d-flex align-items-center">-->
-            <!--                    <input type="text" class="form-control answerContents" name="answerContents">-->
-            <!--                  </div>-->
-            <!--                  <div class="col-sm-1">-->
-            <!--                    <button type="button" class="btn btn-question-answer"><i class="bi bi-pencil-square" style="font-size:2rem"></i>-->
-            <!--                    </button>-->
-            <!--                  </div>-->
-            <!--                  <input type="hidden" class="questionIdx" name="questionIdx" th:value="${item.questionIdx}">-->
-            <!--&lt;!&ndash;                  <input type="hidden" class="method" name="_method">&ndash;&gt;-->
-            <!--                </form>-->
-            <!--              </div>-->
-            <!--            </div>-->
-  
-  
-            <div th:unless="${#lists.size(questionList.getList())}>0">
-              <p>등록된 문의 글이 없습니다.</p>
+            <div th:unless="${#lists.size(questionList.getList())}>0" class="border rounded-3 my-3">
+              <p class="text-center pt-3">등록된 문의 글이 없습니다.</p>
             </div>
           </div>
           
@@ -610,7 +584,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">지도 확대하기</h4>
+          <h4 class="modal-title" th:text="${ceoDto.ceoStore}">지도 확대하기</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -620,7 +594,23 @@
     </div>
   </div>
 </main>
+<script>
+  const lat = $("#ceo-lat").val();
+  const lon = $("#ceo-lon").val();
+  
+  var mapOptions2 = {
+    center: new naver.maps.LatLng(lat, lon),
+    zoom: 15
+  };
+  
+  var map2 = new naver.maps.Map('map2', mapOptions2);
 
+  var marker = new naver.maps.Marker({
+    position: new naver.maps.LatLng(lat, lon),
+    map: map2
+  });
+  
+</script>
 
 <footer></footer>
 

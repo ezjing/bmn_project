@@ -91,4 +91,9 @@ public class BaeServiceImpl implements BaeService {
     List<CommentJoinDTO> commentList = baeMapper.selectCommentList(ceoIdx);
     return commentList;
   }
+
+  @Override
+  public void commentInsert(CommentJoinDTO commentJoinDTO) throws Exception {
+    baeMapper.commentInsert(commentJoinDTO);
+  }
 }
