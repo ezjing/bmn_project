@@ -126,19 +126,39 @@ public class LeeController {
         return "reservation/reservationCeo";
     }
 
+    // 날짜에 따른 데이터 ajax 통신
     @ResponseBody
-    @RequestMapping(value = "/reservationCeo/ceoIdx={ceoIdx}", method = RequestMethod.POST)
-    public Object reservationCeoDateInfo(@RequestParam("reservationDate") String reservationDate, @PathVariable int ceoIdx) throws Exception {    // 날짜정보 제대로 넘어옴!
+    @RequestMapping(value = "/reservationCeo/reservationCeoDateInfo", method = RequestMethod.POST)
+    public Object reservationCeoDateInfo(@RequestParam("reservationDate") String reservationDate, @RequestParam int ceoIdx) throws Exception {    // 날짜정보 제대로 넘어옴!
         List<ReservationDTO> dateList = leeService.selectDateReservation(ceoIdx, reservationDate);    // 해당날짜 예약 정보 가져오기
 
         return dateList; // 예약 시간 전송
     }
 
+    // 날짜 + 시간에 따른 데이터 ajax 통신
     @ResponseBody
     @RequestMapping(value = "/reservationCeo/reservationCeoTimeInfo", method = RequestMethod.POST)
     public Object reservationCeoTimeInfo(@RequestParam String reservationDate, @RequestParam int ceoIdx, @RequestParam int reservationTime) throws Exception {
         ReservationDTO reservation = leeService.selectTimeReservation(reservationDate, ceoIdx, reservationTime);
 
         return reservation;
+    }
+
+    // 승인
+    @ResponseBody
+    @RequestMapping(value = "/reservationCeo/reservationConfirm", method = RequestMethod.PUT)
+    public Object reservationConfirm(@RequestParam String reservationDate, @RequestParam int ceoIdx, @RequestParam int reservationTime) throws Exception {
+        int time = leeService.reservationConfirm(reservationDate, ceoIdx, reservationTime);
+
+        return time;
+    }
+
+    // 거절
+    @ResponseBody
+    @RequestMapping(value = "/reservationCeo/reservationRefuse", method = RequestMethod.POST)
+    public Object reservationRefuse(@RequestParam String reservationDate, @RequestParam int ceoIdx, @RequestParam int reservationTime) throws Exception {
+        int time = leeService.reservationRefuse(reservationDate, ceoIdx, reservationTime);
+
+        return time;
     }
 }

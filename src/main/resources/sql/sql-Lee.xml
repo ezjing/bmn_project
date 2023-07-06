@@ -34,5 +34,18 @@
         AND reservation_date = #{reservationDate}
         AND reservation_time = #{reservationTime}
     </select>
+    <update id="reservationConfirm" parameterType="com.bitc.bmn_project.DTO.ReservationDTO">
+        UPDATE java505_team3_db.reservation_tp
+        SET reservation_stat = 2
+        WHERE ceo_idx = #{ceoIdx}
+        AND reservation_date = #{reservationDate}
+        AND reservation_time = #{reservationTime}
+    </update>
+    <delete id="reservationRefuse" parameterType="com.bitc.bmn_project.DTO.ReservationDTO">
+        DELETE FROM java505_team3_db.reservation_tp
+        WHERE ceo_idx = #{ceoIdx}
+        AND reservation_date = #{reservationDate}
+        AND reservation_time = #{reservationTime}
+    </delete>
 </mapper>
 

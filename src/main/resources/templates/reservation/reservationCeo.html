@@ -11,9 +11,7 @@
             crossorigin="anonymous"></script>
 
     <style>
-        input:disabled {    /* 왜안되지 */
-            background: #198754;
-        }
+
     </style>
     <script>
         let selTime = "";
@@ -23,7 +21,7 @@
                 // alert('클릭이벤트');
                 const reservationDate = $("#reservationDate").val();
                 const ceoIdx = $("#ceoIdx").val();
-                selTime = $(this).attr("for");   // .attr : 해당 속성값 가져오기
+                selTime = $(this).attr("for");   // .attr : 해당 속성값 가져오기, this 는 클릭 이벤트가 일어나는 주체라고 생각하면 쉽다.
                 // console.log(selTime);   // 날짜 선택했을때 else로 안넘어감 클릭 이벤트가 발생하지 않음
 
                 if (reservationDate == "") {
@@ -36,7 +34,7 @@
                         type: "POST",
                         data: {reservationDate: reservationDate, ceoIdx: ceoIdx, reservationTime: selTime},
                         success: function (data) {
-                            alert("ajax 통신 성공.");
+                            // alert("ajax 통신 성공.");
                             const reservationPeople = data.reservationPeople;
                             const reservationContents = data.reservationContents;
 
@@ -53,34 +51,93 @@
         }
 
         $(document).ready(function () {
-            $("#cancel").on("click", function () {
-                // alert("클릭 이벤트");
-                let test = $("#btnCheck").find("label");    // btnCheck div 자손 label 태그들 리스트로 반환
-                console.log(test[0]);   // 0번 인덱스의 녀석 출력
+            $("#refuse").on("click", function () {
+                alert("거절하시겠습니까?"); // 아무거도 선택 안한 상태에서 눌렀을때 오류메시지 출력(ajax error에 쓰면됨)
 
-                let tempHtml = `<br>경아</br>메롱`;
-                // test[0].append(tempHtml);
+                const reservationDate = $("#reservationDate").val();
+                const ceoIdx = $("#ceoIdx").val();
 
-                console.log($("#11").val());
+                $.ajax({
+                    url: "/bmn/reservationCeo/reservationRefuse",
+                    type: "POST",
+                    data: {reservationDate: reservationDate, ceoIdx: ceoIdx, reservationTime: selTime},
+                    success: function (data) {  // 클릭한 버튼 val
+                        let inputList = $("#replace").find("input");
 
-                for (let i = 0; i < test.length; i++) {
-                    test[i].append(tempHtml);
-                }
+                        for(let i = 0; i < inputList.length; i++) {
+                            const tag2 = inputList[i];  // input 태그가 0번부터 출력됨....
+                            const reservationTime = $(tag2).val();  // input 태그의 val값 가져옴
 
-                // if ($().attr("id") == 1) { alert("id 는 1"); }   // 태그가 한개로 특정되어야함
 
-                // history.back();
+                            // const pTag = $(tag2).children();    // input 태그의 자식인 p 태그 지정
+                            // console.log(pTag);
+                            // const text = $(pTag).val();  // p 태그의 val값
+                            // console.log(text);
+
+                            if (data == reservationTime) {    // 버튼이 가진 값과 클릭한 버튼을 조회해야함(시간값으로 맞춰 가져옴).
+                                if (tag2.nextElementSibling.textContent.length == 5) {
+                                    alert("예약 일정이 있는 시간을 선택해주세요.");
+                                }
+                                else {
+                                    alert("예약 취소가 완료되었습니다.");
+
+                                    console.log(tag2.nextElementSibling);   // nextElementSibling : 지정한 요소(태그)의 바로 다음 요소(태그)를 가져옴
+                                    console.log(tag2.nextElementSibling.textContent);   // textContent : 해당 태그의 택스트를 가져옴(value가 아님)
+                                    tag2.nextElementSibling.textContent = $(tag2).val() + ":00";
+                                    // $(tag2).removeAttr("checked")    // 라디오라서 그런지 채크해제가 안먹음
+
+                                    $("#reservationPeople").val("");
+                                    $("#reservationContents").val("");
+                                }
+                            }
+                        }
+                    },
+                    error: function () {
+                        alert("예약 일정이 있는 시간을 선택해주세요.");
+                    }
+                });
             });
-            // $("#submit").on("click", function () {
-            //
-            // });
+            $("#confirm ").on("click", function () {
+                alert("승인하시겠습니까?"); // 모달로 띄워야함(위에뜨는 모달사용)
+
+                const reservationDate = $("#reservationDate").val();
+                const ceoIdx = $("#ceoIdx").val();
+
+                $.ajax({
+                    url: "/bmn/reservationCeo/reservationConfirm",
+                    type: "PUT",
+                    data: {reservationDate: reservationDate, ceoIdx: ceoIdx, reservationTime: selTime},
+                    success: function (data) {  // PUT 타입이기떄문에 data값이 없음 그럼 가져와야지. PUT을 reservationTime으로 들고옴
+                        let inputList = $("#replace").find("input");
+
+                        for(let i = 0; i < inputList.length; i++) {
+                            const tag2 = inputList[i];  // input 태그가 0번부터 출력됨....
+                            const reservationTime = $(tag2).val();  // input 태그의 val값 가져옴
+                            if (data == reservationTime) {    // 버튼이 가진 값과 예약완료된 버튼을 조회해야함(시간값으로 맞춰 가져옴).
+                                if (tag2.nextElementSibling.textContent.length == 5) {
+                                    alert("예약 일정이 있는 시간을 선택해주세요.");
+                                }
+                                else {
+                                    alert("승인이 완료되었습니다.");
+                                    $(tag2).attr("disabled", 'true');
+                                }
+                            }
+                        }
+                    },
+                    error: function () {    // 빈 버튼 클릭하면
+                        alert("예약 일정이 있는 시간을 선택해주세요.");
+                    }
+                });
+
+
+            })
             $("#reservationDate").on("change", function () {
                 // alert("변경 이벤트 발생");
                 const reservationDate = $("#reservationDate").val();    // 문자열로 제대로 들고옴
                 const ceoIdx = $("#ceoIdx").val();
 
                 $.ajax({
-                    url: "/bmn/reservationCeo/ceoIdx=" + ceoIdx,    // 주소 수정!!!!!!!!!!  (로그인 구현 후 타임리프로 히든태그 값 주기)
+                    url: "/bmn/reservationCeo/reservationCeoDateInfo",    // 주소 수정!!!!!!!!!!  (로그인 구현 후 타임리프로 히든태그 값 주기)
                     type: "POST",
                     data: {reservationDate: reservationDate, ceoIdx: ceoIdx},
                     success: function (data) {  // data = dateList
@@ -94,10 +151,10 @@
                             "                        <div class=\"row mb-2\">\n" +
                             "                            <div class=\"d-flex\">\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"11\" value=\"11\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"11\"  style=\"width: 10em; height: 5em;\" id=\"lab11\">11:00<br></label>\n" +
-                            "                                <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
-                            "                                <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
-                            "                                <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"11\"  style=\"width: 10em; height: 5em;\" id=\"lab11\">11:00<br></label>\n" +
+                            "                                <button class=\"btn btn-success me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
+                            "                                <button class=\"btn btn-success me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
+                            "                                <button class=\"btn btn-success me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
                             "                            </div>\n" +
                             "                        </div>\n" +
                             "\n" +
@@ -105,73 +162,77 @@
                             "                        <div class=\"row mb-2\">\n" +
                             "                            <div class=\"d-flex\">\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"12\" value=\"12\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"12\"  style=\"width: 10em; height: 5em;\" id=\"lab12\">12:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"12\"  style=\"width: 10em; height: 5em;\" id=\"lab12\">12:00<br></label>\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"01\" value=\"01\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"01\"  style=\"width: 10em; height: 5em;\" id=\"lab01\">01:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"01\"  style=\"width: 10em; height: 5em;\" id=\"lab01\">01:00<br></label>\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"02\" value=\"02\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"02\"  style=\"width: 10em; height: 5em;\" id=\"lab02\">02:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"02\"  style=\"width: 10em; height: 5em;\" id=\"lab02\">02:00<br></label>\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"03\" value=\"03\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"03\"  style=\"width: 10em; height: 5em;\" id=\"lab03\">03:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"03\"  style=\"width: 10em; height: 5em;\" id=\"lab03\">03:00<br></label>\n" +
                             "                            </div>\n" +
                             "                        </div>\n" +
                             "                        <div class=\"row mb-2\">\n" +
                             "                            <div class=\"d-flex\">\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"04\" value=\"04\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"04\"  style=\"width: 10em; height: 5em;\" id=\"lab04\">04:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"04\"  style=\"width: 10em; height: 5em;\" id=\"lab04\">04:00<br></label>\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"05\" value=\"05\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"05\"  style=\"width: 10em; height: 5em;\" id=\"lab05\">05:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"05\"  style=\"width: 10em; height: 5em;\" id=\"lab05\">05:00<br></label>\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"06\" value=\"06\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"06\"  style=\"width: 10em; height: 5em;\" id=\"lab06\">06:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"06\"  style=\"width: 10em; height: 5em;\" id=\"lab06\">06:00<br></label>\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"07\" value=\"07\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"07\"  style=\"width: 10em; height: 5em;\" id=\"lab07\">07:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"07\"  style=\"width: 10em; height: 5em;\" id=\"lab07\">07:00<br></label>\n" +
                         "                            </div>\n" +
                             "                        </div>\n" +
                             "                        <div class=\"row mb-2\">\n" +
                             "                            <div class=\"d-flex\">\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"08\" value=\"08\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"08\"  style=\"width: 10em; height: 5em;\" id=\"lab08\">08:00</label>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"08\"  style=\"width: 10em; height: 5em;\" id=\"lab08\">08:00<br></label>\n" +
                             "                                <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"09\" value=\"09\">\n" +
-                            "                                <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"09\"  style=\"width: 10em; height: 5em;\" id=\"lab09\">09:00</label>\n" +
-                            "                                <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
-                            "                                <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
+                            "                                <label class=\"btn btn-success me-2 d-flex justify-content-center align-items-center time-label\" for=\"09\"  style=\"width: 10em; height: 5em;\" id=\"lab09\">09:00<br></label>\n" +
+                            "                                <button class=\"btn btn-success me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
+                            "                                <button class=\"btn btn-success me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
                             "                            </div>\n" +
                             "                        </div>\n" +
                             "                    </div>";
                         $("#replace").append(contents)
 
+                        let inputList = $("#replace").find("input");    // replace div 자손 input 태그들 리스트로 반환
                         let labelList = $("#replace").find("label");    // replace div 자손 label 태그들 리스트로 반환
 
-                        for (let i = 0; i < labelList.length; i++) {    // 라벨리스트 만큼 반복문
+                        for (let i = 0; i < data.length; i++) {    // 에러 발생 지점1 : labelList 길이만큼 반복 -> data 길이만큼 반복
                             let customerName = data[i]?.customerName;   // Uncaught TypeError: Cannot read properties of undefined 에러 발생 시 . 앞에 ? 붙이기
                             let reservationPeople = data[i]?.reservationPeople;
                             let reservationTime = data[i]?.reservationTime;
+                            let reservationStat = data[i]?.reservationStat;
 
-                            console.log(customerName);
-                            console.log(reservationPeople);
-                            console.log(i);
+                            // console.log(customerName);
+                            // console.log(reservationPeople);
 
                             // let tempHtml = `\n${customerName}${reservationPeople}명`;
                             if (customerName != undefined && reservationPeople != undefined) {  // 둘 다 언디파인드가 아닌 경우에만 출력하게끔
-                                for (let j in labelList) {
-                                    console.log(j.attr('for'));
+                                // console.log(labelList.length);
+                                for (let j = 0; j < labelList.length; j++) {    // 에러 발생 지점2 : 향상된 for문 -> 일반 for문으로 수정
+                                    const tag = labelList[j];   // tag 가 순수 js 문법으로 구성됨
+                                    // console.log(tag.getAttribute("for"));    // js로 html 코드 가져오기
+                                    // console.log($(tag).attr("for"));    // $()는 js 를 jquery 문법으로 만들도록 한번 감싸주는것 그래서 제이쿼리로 변경 시키고 제이쿼리 문법인 attr을 써야 제대로 출력 됨, jquery로 js 가져오기
+                                    const tag2 = inputList[j];
+                                    // console.log(tag2)
+
+                                    const lab = $(tag).attr("for");
+
+
+                                    if (reservationTime == lab) {   // 받아온 reservationTime과 라디오의 val이 일치하는 radio에 넣어야함
+                                        const tempHtml = customerName + '\n' + reservationPeople + "명";
+
+                                        labelList[j].append(tempHtml);  // 라벨리스트에 해당 내용 입력.(이러면 모든 라벨 리스트에 입력됨)
+                                        if (reservationStat == 2) {
+                                            $(tag2).attr("disabled", 'true')
+                                            // console.log(tag2)
+                                        }
+                                    }
                                 }
-                                // if (reservationTime == selTime) {   // 받아온 reservationTime과 라디오의 val이 일치하는 radio에 넣어야함
-                                    let tempHtml = customerName + '\n\n\n\n\n' + reservationPeople + " 명";
-                                    console.log(labelList[i])
-                                    labelList[i].append(tempHtml);  // 라벨리스트에 해당 내용 입력.(이러면 모든 라벨 리스트에 입력됨)
-                                // }
                             }
                         }
-
-                        // DTO .. 안될거 같고 for문이라 List로 받고 add로 추가 해야할거같음.
-
-
-                        // 버튼 클릭하면 해당 버튼의 예약 정보(인원, 상세 내용)
-                        // for (let i = 0; i < data.length; i++) { // data는 List, data[i]는 reservationDTO 타입 배열임
-                        //     data[i].customerName     // 입력시킬방법 찾는중.... 이렇게 받아와서 배열에 입력을 시킬까. 그러면 name만 있는 배열, 인원만 있는 배열.. 버튼에 다 번호를 주고 해당 번호에 val 입력
-                        //     if ($(".클래스문구").attr("id") == i) { }
-                        //     // 클래스에 문구가있는 태그들의 아이디 값과 i의 값이 같으면(== 나 .eqauls 사용)
-                        // }
 
                         events();
                     },
@@ -190,14 +251,14 @@
 <header th:replace="~{layout/header :: header}"></header>
 
 <main class="container-sm" id="main">
-    <form action="/bmn/reservationCeo/ceoIdx=2/customerIdx=2" method="post">
+    <form action="" method="post" id="form">
         <div class="row">
             <div class="col-2">
                 <div class="border">
                     <label for="reservationPeople" class="form-label">예약 인원</label>
-                    <input type="text" class="form-control" id="reservationPeople" name="reservationPeople">
+                    <input type="text" class="form-control" id="reservationPeople" name="reservationPeople" readonly>
                     <label for="reservationContents" class="form-label">상세 내용</label>
-                    <input type="text" class="form-control" id="reservationContents" name="reservationContents">
+                    <input type="text" class="form-control" id="reservationContents" name="reservationContents" readonly>
                 </div>
             </div>
             <div class="col-10">
@@ -210,10 +271,10 @@
                         <div class="row mb-2">
                             <div class="d-flex">
                                 <input type="radio" class="btn-check" name="reservationTime" id="11" value="11">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="11"  style="width: 10em; height: 5em;" id="lab11">11:00<br></label>
-                                <button class="btn btn-success opacity-100 me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
-                                <button class="btn btn-success opacity-100 me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
-                                <button class="btn btn-success opacity-100 me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="11"  style="width: 10em; height: 5em;" id="lab11">11:00<br></label>
+                                <button class="btn btn-success me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
+                                <button class="btn btn-success me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
+                                <button class="btn btn-success me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
                             </div>
                         </div>
 
@@ -221,51 +282,52 @@
                         <div class="row mb-2">
                             <div class="d-flex">
                                 <input type="radio" class="btn-check" name="reservationTime" id="12" value="12">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="12"  style="width: 10em; height: 5em;" id="lab12">12:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="12"  style="width: 10em; height: 5em;" id="lab12">12:00<br></label>
                                 <input type="radio" class="btn-check" name="reservationTime" id="01" value="01">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="01"  style="width: 10em; height: 5em;" id="lab01">01:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="01"  style="width: 10em; height: 5em;" id="lab01">01:00<br></label>
                                 <input type="radio" class="btn-check" name="reservationTime" id="02" value="02">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="02"  style="width: 10em; height: 5em;" id="lab02">02:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="02"  style="width: 10em; height: 5em;" id="lab02">02:00<br></label>
                                 <input type="radio" class="btn-check" name="reservationTime" id="03" value="03">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="03"  style="width: 10em; height: 5em;" id="lab03">03:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="03"  style="width: 10em; height: 5em;" id="lab03">03:00<br></label>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="d-flex">
                                 <input type="radio" class="btn-check" name="reservationTime" id="04" value="04">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="04"  style="width: 10em; height: 5em;" id="lab04">04:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="04"  style="width: 10em; height: 5em;" id="lab04">04:00<br></label>
                                 <input type="radio" class="btn-check" name="reservationTime" id="05" value="05">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="05"  style="width: 10em; height: 5em;" id="lab05">05:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="05"  style="width: 10em; height: 5em;" id="lab05">05:00<br></label>
                                 <input type="radio" class="btn-check" name="reservationTime" id="06" value="06">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="06"  style="width: 10em; height: 5em;" id="lab06">06:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="06"  style="width: 10em; height: 5em;" id="lab06">06:00<br></label>
                                 <input type="radio" class="btn-check" name="reservationTime" id="07" value="07">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="07"  style="width: 10em; height: 5em;" id="lab07">07:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="07"  style="width: 10em; height: 5em;" id="lab07">07:00<br></label>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="d-flex">
                                 <input type="radio" class="btn-check" name="reservationTime" id="08" value="08">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="08"  style="width: 10em; height: 5em;" id="lab08">08:00</label>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="08"  style="width: 10em; height: 5em;" id="lab08">08:00<br></label>
                                 <input type="radio" class="btn-check" name="reservationTime" id="09" value="09">
-                                <label class="btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label" for="09"  style="width: 10em; height: 5em;" id="lab09">09:00</label>
-                                <button class="btn btn-success opacity-100 me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
-                                <button class="btn btn-success opacity-100 me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
+                                <label class="btn btn-success me-2 d-flex justify-content-center align-items-center time-label" for="09"  style="width: 10em; height: 5em;" id="lab09">09:00<br></label>
+                                <button class="btn btn-success me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
+                                <button class="btn btn-success me-2" type="button" style="width: 10em; height: 5em; visibility: hidden;"></button>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="d-flex justify-content-center">
                         <input type="hidden" id="customerIdx" name="customerIdx" value="2">   <!--  나중에 수정해야함, th:value  -->
                         <input type="hidden" id="ceoIdx" name="ceoIdx" value="2">
                         <input type="hidden" id="customerName" name="customerName" value="테스터2">
-                        <button class="btn btn-secondary mx-5" type="button" style="width: 6em; height: 3em;" id="cancel">거절</button>
-                        <button class="btn btn-primary mx-5" type="submit" style="width: 6em; height: 3em;" id="submit">승인</button>
+                        <button class="btn btn-secondary mx-5" type="button" style="width: 6em; height: 3em;" id="refuse">거절</button>
+                        <button class="btn btn-primary mx-5" type="button" style="width: 6em; height: 3em;" id="confirm">승인</button>
                     </div>
                 </div>
             </div>
         </div>
+        <!--  REST 방식 사용 시 form 태그의 데이터 전송 방식을 변경하기 위한 태그  -->
+        <input type="hidden" id="method" name="_method">
     </form>
 </main>
 
