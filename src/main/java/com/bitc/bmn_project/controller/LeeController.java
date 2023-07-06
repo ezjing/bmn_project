@@ -161,4 +161,15 @@ public class LeeController {
 
         return time;
     }
+
+
+
+
+    /////////////////////////////// 마이페이지 /////////////////////////////////
+
+    @RequestMapping(value = "/myPage")
+    public String myPageView() throws Exception {
+
+        return "myPage/myPageCus";
+    }
 }
