@@ -6,7 +6,6 @@
     <insert id="insertReservation" parameterType="com.bitc.bmn_project.DTO.ReservationDTO">
         INSERT INTO java505_team3_db.reservation_tp (customer_idx, ceo_idx, customer_name, reservation_stat, reservation_people, reservation_contents, reservation_date, reservation_time)
         VALUES (#{customerIdx}, #{ceoIdx}, #{customerName}, 1, #{reservationPeople}, #{reservationContents}, #{reservationDate}, #{reservationTime})
-<!--        VALUES (1, 1, 1, #{reservationPeople}, #{reservationContents}, #{reservationDate}, #{reservationTime})-->
     </insert>
     <select id="selectReservation" parameterType="int" resultType="com.bitc.bmn_project.DTO.ReservationDTO">
         SELECT *

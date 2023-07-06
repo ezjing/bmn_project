@@ -52,8 +52,10 @@
 
         $(document).ready(function () {
             $("#refuse").on("click", function () {
-                alert("거절하시겠습니까?"); // 아무거도 선택 안한 상태에서 눌렀을때 오류메시지 출력(ajax error에 쓰면됨)
-
+                $("#modalRefuse").modal("show");
+            })
+            $("#lastRefuse").on("click", function () {
+                $("#modalRefuse").modal("hide");
                 const reservationDate = $("#reservationDate").val();
                 const ceoIdx = $("#ceoIdx").val();
 
@@ -97,9 +99,13 @@
                     }
                 });
             });
-            $("#confirm ").on("click", function () {
-                alert("승인하시겠습니까?"); // 모달로 띄워야함(위에뜨는 모달사용)
 
+            $("#confirm").on("click", function () {
+                $("#modalConfirm").modal("show");
+            })
+
+            $("#lastConfirm ").on("click", function () {
+                $("#modalConfirm").modal("hide");
                 const reservationDate = $("#reservationDate").val();
                 const ceoIdx = $("#ceoIdx").val();
 
@@ -329,6 +335,42 @@
         <!--  REST 방식 사용 시 form 태그의 데이터 전송 방식을 변경하기 위한 태그  -->
         <input type="hidden" id="method" name="_method">
     </form>
+
+    <div class="modal fade" id="modalRefuse" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">밥뭇나</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>거절하시겠습니까?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="lastRefuse">거절</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalConfirm" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">밥뭇나</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>승인하시겠습니까?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="lastConfirm">승인</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer th:replace="~{layout/footer :: footer}"></footer>
