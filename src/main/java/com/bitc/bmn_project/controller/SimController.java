@@ -306,7 +306,7 @@ public class SimController {
         simService.reviewWriteTag(reviewTag);
 
 
-        // 상세뷰로 보내야함
+        // 상세뷰로 보내야함ㅁ
         return "redirect:/bmn/";
     }
 }
