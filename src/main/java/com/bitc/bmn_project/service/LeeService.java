@@ -9,6 +9,7 @@ public interface LeeService {
 
     List<ReservationDTO> selectReservation(int ceoIdx) throws Exception;
 
+<<<<<<< HEAD
     ReservationDTO getReservationInfo(int customerIdx, int ceoIdx, String reservationDate, int reservationTime) throws Exception;
 
     List<ReservationDTO> selectDateReservation(int ceoIdx, String reservationDate) throws Exception;
@@ -22,4 +23,7 @@ public interface LeeService {
     List<ReservationDTO> myPageReservation(int customerIdx) throws Exception;
 
     List<ReservationDTO> myPageReview(int customerIdx) throws Exception;
+=======
+    ReservationDTO getReservationInfo(int customerIdx, int ceoIdx) throws Exception;
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
 }

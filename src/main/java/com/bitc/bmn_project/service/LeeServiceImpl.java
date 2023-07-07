@@ -23,6 +23,7 @@ public class LeeServiceImpl implements LeeService{
     }
 
     @Override
+<<<<<<< HEAD
     public ReservationDTO getReservationInfo(int customerIdx, int ceoIdx,  String reservationDate,int reservationTime) throws Exception {
         return leeMapper.getReservationInfo(customerIdx, ceoIdx, reservationDate, reservationTime);
     }
@@ -63,5 +64,9 @@ public class LeeServiceImpl implements LeeService{
     @Override
     public List<ReservationDTO> myPageReview(int customerIdx) throws Exception {
         return leeMapper.myPageReview(customerIdx);
+=======
+    public ReservationDTO getReservationInfo(int customerIdx, int ceoIdx) throws Exception {
+        return leeMapper.getReservationInfo(customerIdx, ceoIdx);
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
     }
 }

@@ -1,6 +1,9 @@
 package com.bitc.bmn_project.controller;
 
+<<<<<<< HEAD
 import com.bitc.bmn_project.DTO.CeoDTO;
+=======
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
 import com.bitc.bmn_project.DTO.CustomerDTO;
 import com.bitc.bmn_project.DTO.ReservationDTO;
 import com.bitc.bmn_project.service.LeeService;
@@ -30,9 +33,14 @@ public class LeeController {
         return "index";
     }
 
+<<<<<<< HEAD
     // 받기 전에 상세 페이지에서 get으로 가게 테이블 정보(ceoIdx, ceoName)가 제공되어야함 제공된거 타임리프로 input hidden에 꼭 넣어야함, mv.addObject(가게정보 dto) 이런식
     // 고객 정보가 입력된 view 제공
     @RequestMapping(value = "/reservationCus/ceoIdx={ceoIdx}", method = RequestMethod.GET)  // ceoIdx 통합할때 지워버리기
+=======
+    // 고객 정보가 입력된 view 제공
+    @RequestMapping(value = "/reservationCus/ceoIdx={ceoIdx}", method = RequestMethod.GET)
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
     public ModelAndView reservationCusView(@PathVariable int ceoIdx, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 //        CustomerDTO customer = new CustomerDTO(); // 로그인 정보 쓸때 주석 해제
 //        HttpSession session = req.getSession();   // 로그인 정보 쓸때 주석 해제
@@ -62,19 +70,34 @@ public class LeeController {
     // 가게, 날짜 정보에 따른 예약 여부 제공
     @ResponseBody
     @RequestMapping(value = "/reservationCus/ceoIdx={ceoIdx}", method = RequestMethod.POST)
+<<<<<<< HEAD
     public Object reservationCusAjax(@RequestParam("reservationDate") String reservationDate, @PathVariable int ceoIdx) throws Exception {    // 날짜정보 제대로 넘어옴!
         List<ReservationDTO> reservationList = new ArrayList<>();   // 전체 정보
         reservationList = leeService.selectReservation(ceoIdx);
         List<Integer> dayTimeList = new ArrayList<>();  // time만
+=======
+    public Object reservationCusAjax(@RequestParam("reservationDate") String reservationDate, int ceoIdx) throws Exception {    // 날짜정보 제대로 넘어옴!
+        List<ReservationDTO> reservationList = new ArrayList<>();   // 전체 정보
+        reservationList = leeService.selectReservation(ceoIdx);
+        List<Integer> dateList = new ArrayList<>();  // time만
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
 
         for (ReservationDTO reservation : reservationList) {
             if (reservationDate.equals(reservation.getReservationDate())) {
                 int time = reservation.getReservationTime();   // 날짜 하나 들고오기
 
+<<<<<<< HEAD
                 dayTimeList.add(time);
             }
         }
         return dayTimeList; // 제대로 넘어감
+=======
+                dateList.add(time);
+            }
+        }
+//        return reservationList;
+        return dateList; // 제대로 넘어감
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
     }
 
     // 고객의 예약 정보 입력 process 및 view 제공(get 방식으로 view만 먼저 구현하는 방법도 생각해보기)
@@ -89,6 +112,7 @@ public class LeeController {
 //        String reservationDate = reservation.getReservationDate();
 //        int reservationTime = reservation.getReservationTime();
 //
+<<<<<<< HEAD
 //        ReservationDTO reservationInfo = leeService.getReservationInfo(customerIdx, ceoIdx, reservationDate, reservationTime);   // 가게번호, 고객번호, 날짜, 시간을 동시에 조회하여 예약 정보 가져오기
 
 //        mv.addObject("reservationInfo", reservationInfo);
@@ -203,4 +227,29 @@ public class LeeController {
         return reservation;
     }
 >>>>>>> ezbranch
+=======
+//        leeService.insertReservation(reservation);  // 예약 정보 입력(동일 고객 같은날 중복 예약 불가하도록 해야함)
+//
+////        int idx = reservation.getReservationIdx();
+//
+////        ReservationDTO reservationInfo = leeService.selectReservation(idx);  // 예약 정보 들고오기.. 모든 정보를 가져와야하는데.... 사장이 입력 + 다른 고객 입력 + 본인이 한 다른 예약 까지도
+////
+////        mv.addObject("reservationInfo", reservationInfo);
+//
+//        return mv;
+//    }
+
+    // 고객의 예약 정보 입력 process 및 view 제공(get 방식으로 view만 먼저 구현하는 방법도 생각해보기)
+    @RequestMapping(value = "/reservationCus/ceoIdx={ceoIdx}&customerIdx={customerIdx}", method = RequestMethod.POST)   // POST 방식이라 url로 넘어오는 ceoIdx가 인식안되므로 null 인거같음
+    public ModelAndView reservationCusProcess(@PathVariable int customerIdx, @PathVariable String ceoIdx, ReservationDTO reservation) throws Exception {
+        ModelAndView mv = new ModelAndView("reservation/reservationCus");
+
+        leeService.insertReservation(reservation);  // 예약 정보 입력(동일 고객 같은날 중복 예약 불가하도록 해야함)
+        ReservationDTO reservationInfo = leeService.getReservationInfo(customerIdx, ceoIdx);   // 가게번호와 고객번호를 동시에 조회하여 예약 정보 가져오기
+
+        mv.addObject("reservationInfo", reservationInfo);
+
+        return mv;
+    }
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
 }

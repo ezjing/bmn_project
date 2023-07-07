@@ -12,11 +12,16 @@
         FROM java505_team3_db.reservation_tp
         WHERE ceo_idx = #{ceoIdx}
     </select>
+<<<<<<< HEAD
     <select id="getReservationInfo" parameterType="com.bitc.bmn_project.DTO.ReservationDTO" resultType="com.bitc.bmn_project.DTO.ReservationDTO">
+=======
+    <select id="getReservationInfo" parameterType="map" resultType="com.bitc.bmn_project.DTO.ReservationDTO">
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
         SELECT *
         FROM java505_team3_db.reservation_tp
         WHERE customer_idx = #{customerIdx}
         AND ceo_idx = #{ceoIdx}
+<<<<<<< HEAD
         AND reservation_date = #{reservationDate}
         AND reservation_time = #{reservationTime}
     </select>
@@ -64,6 +69,8 @@
         ON U.customer_idx = V.customer_idx
         WHERE U.customer_idx = #{customerIdx}
         ORDER BY review_date DESC
+=======
+>>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
     </select>
 </mapper>
 
