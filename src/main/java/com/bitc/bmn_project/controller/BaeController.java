@@ -182,13 +182,13 @@ public class BaeController {
   }
 
   // 페이징 처리를 위한 PageInfo 타입 리스트 가져오기
-  @ResponseBody
-  @RequestMapping(value = "/viewDetail/{ceoIdx}", method = RequestMethod.POST)
-  public Object questionPageControll(@PathVariable("ceoIdx") int ceoIdx, @RequestParam("pageNum") int pageNum) throws Exception {
-    PageInfo<QuestionDTO> questionList = new PageInfo<>(baeService.selectQuestionList(ceoIdx, pageNum), 5);
-
-    return questionList;
-  }
+//  @ResponseBody
+//  @RequestMapping(value = "/viewDetail/{ceoIdx}", method = RequestMethod.POST)
+//  public Object questionPageControll(@PathVariable("ceoIdx") int ceoIdx, @RequestParam(required = false, defaultValue = "1") int pageNum) throws Exception {
+//    PageInfo<QuestionDTO> questionList = new PageInfo<>(baeService.selectQuestionList(ceoIdx, pageNum), 5);
+//
+//    return questionList;
+//  }
   
 }
 
