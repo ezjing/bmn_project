@@ -4,8 +4,14 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bitc.bmn_project.mapper.LeeMapper">
     <insert id="insertReservation" parameterType="com.bitc.bmn_project.DTO.ReservationDTO">
+<<<<<<< HEAD
         INSERT INTO java505_team3_db.reservation_tp (customer_idx, customer_name, ceo_idx, ceo_store, reservation_stat, reservation_people, reservation_contents, reservation_date, reservation_time)
         VALUES (#{customerIdx}, #{customerName}, #{ceoIdx}, #{ceoStore}, 1, #{reservationPeople}, #{reservationContents}, #{reservationDate}, #{reservationTime})
+=======
+        INSERT INTO java505_team3_db.reservation_tp (customer_idx, ceo_idx, customer_name, reservation_stat, reservation_people, reservation_contents, reservation_date, reservation_time)
+        VALUES (#{customerIdx}, #{ceoIdx}, #{customerName}, 1, #{reservationPeople}, #{reservationContents}, #{reservationDate}, #{reservationTime})
+<!--        VALUES (1, 1, 1, #{reservationPeople}, #{reservationContents}, #{reservationDate}, #{reservationTime})-->
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
     </insert>
     <select id="selectReservation" parameterType="int" resultType="com.bitc.bmn_project.DTO.ReservationDTO">
         SELECT *
@@ -13,14 +19,19 @@
         WHERE ceo_idx = #{ceoIdx}
     </select>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <select id="getReservationInfo" parameterType="com.bitc.bmn_project.DTO.ReservationDTO" resultType="com.bitc.bmn_project.DTO.ReservationDTO">
 =======
     <select id="getReservationInfo" parameterType="map" resultType="com.bitc.bmn_project.DTO.ReservationDTO">
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+    <select id="getReservationInfo" parameterType="com.bitc.bmn_project.DTO.ReservationDTO" resultType="com.bitc.bmn_project.DTO.ReservationDTO">
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
         SELECT *
         FROM java505_team3_db.reservation_tp
         WHERE customer_idx = #{customerIdx}
         AND ceo_idx = #{ceoIdx}
+<<<<<<< HEAD
 <<<<<<< HEAD
         AND reservation_date = #{reservationDate}
         AND reservation_time = #{reservationTime}
@@ -71,6 +82,10 @@
         ORDER BY review_date DESC
 =======
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+        AND reservation_date = #{reservationDate}
+        AND reservation_time = #{reservationTime}
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
     </select>
 </mapper>
 

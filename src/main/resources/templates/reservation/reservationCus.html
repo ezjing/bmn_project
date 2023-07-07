@@ -41,6 +41,7 @@
                 const reservationDate = $("#reservationDate").val();
                 // 날짜 가져오기 (selTime)
 
+<<<<<<< HEAD
 
                 if (reservationPeople == "" || reservationDate == "" || selTime == "") {    // 상세내용만 생략 가능
                     alert("예약 정보를 모두 입력하세요.")
@@ -55,6 +56,56 @@
                     // 모달 호출
                     $("#modal").modal("show");
                 }
+=======
+                // 모달에 데이터 집어넣기
+                $("#resvPeople").text(reservationPeople);
+                $("#resvContents").text(reservationContents);
+                $("#resvDate").text(reservationDate);
+                $("#resvTime").text(selTime);
+
+                // let table;
+                // $("#tbody").empty();
+                //
+                // if (reservationPeople == null || reservationContents == null || reservationDate == null || selTime == null) {
+                //     table = "<p>예약 정보를 모두 입력해주세요.</p>";
+                //
+                //     $("#tbody").append(table);
+                // }
+                // else {
+                //     // 모달에 데이터 집어넣기
+                //     $("#resvPeople").text(reservationPeople);
+                //     $("#resvContents").text(reservationContents);
+                //     $("#resvDate").text(reservationDate);
+                //     $("#resvTime").text(selTime);
+                //
+                //     table = "<tr>\n" +
+                //         "                            <th class=\"py-4 text-center\" style=\"background-color: #D7D8DAFF\">예약자</th>\n" +
+                //         "                            <td class=\"py-4 ps-2\" id=\"resvCustomerName\">이지원</td>\n" +
+                //         "                            <td></td>\n" +
+                //         "                            <td></td>\n" +
+                //         "                        </tr>\n" +
+                //         "                        <tr th:if=\"${reservationPeople}\">\n" +
+                //         "                            <th class=\"py-4 text-center\" style=\"background-color: #D7D8DAFF\">인원</th>\n" +
+                //         "                            <td class=\"py-4 ps-2\" id=\"resvPeople\">2</td>\n" +
+                //         "                            <td></td>\n" +
+                //         "                            <td></td>\n" +
+                //         "                        </tr>\n" +
+                //         "                        <tr>\n" +
+                //         "                            <th class=\"py-4 text-center\" style=\"background-color: #D7D8DAFF\">상세 내용</th>\n" +
+                //         "                            <td class=\"py-4 ps-2\" id=\"resvContents\">조용한 자리</td>\n" +
+                //         "                            <td></td>\n" +
+                //         "                            <td></td>\n" +
+                //         "                        </tr>\n" +
+                //         "                        <tr>\n" +
+                //         "                            <th class=\"py-4 text-center\" style=\"background-color: #D7D8DAFF\">예약 날짜</th>\n" +
+                //         "                            <td class=\"py-4 ps-2\" id=\"resvDate\">2023-07-04</td>\n" +
+                //         "                            <th class=\"py-4 text-center\" style=\"background-color: #D7D8DAFF\">예약 시간</th>\n" +
+                //         "                            <td class=\"py-4 ps-2\" id=\"resvTime\">12:00</td>\n" +
+                //         "                        </tr>";
+                //
+                //     $("#tbody").append(table);
+                // }
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
             });
 
             $("#submit").on("click", function () {
@@ -66,6 +117,11 @@
 
                 form.action = "/bmn/reservationCus/ceoIdx=" + ceoIdx + "/customerIdx=" + customerIdx;
                 form.submit();
+<<<<<<< HEAD
+=======
+
+                // exception 넣는법 찾아보자.
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
             });
 
             $("#reservationDate").on("change", function () {
@@ -81,20 +137,28 @@
                         // alert("ajax 통신 성공.");   // 통신 성공 ㅇㅇ
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                         $("#replace").empty(); // 자손태그 삭제, 본인 남김
 =======
                         $("#btnCheck").empty(); // 자손태그 삭제, 본인 남김
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+                        $("#replace").empty(); // 자손태그 삭제, 본인 남김
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                         let contents = "<div class=\"row border mb-3\">\n" +
                             "                    <h3>오전</h3>\n" +
                             "                    <div class=\"row mb-2\">\n" +
                             "                        <div class=\"d-flex\">\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"11\" value=\"11\">\n" +
 <<<<<<< HEAD
+<<<<<<< HEAD
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"11\"  style=\"width: 10em; height: 5em;\" id=\"lab11\">11:00</label>\n" +
 =======
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"11\"  style=\"width: 10em; height: 5em;\" id=\"lab11\">11:00</label>\n" +
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"11\"  style=\"width: 10em; height: 5em;\" id=\"lab11\">11:00</label>\n" +
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                             "                            <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
                             "                            <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
                             "                            <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
@@ -106,6 +170,7 @@
                             "                        <div class=\"d-flex\">\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"12\" value=\"12\">\n" +
 <<<<<<< HEAD
+<<<<<<< HEAD
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"12\"  style=\"width: 10em; height: 5em;\" id=\"lab12\">12:00</label>\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"01\" value=\"01\">\n" +
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"01\"  style=\"width: 10em; height: 5em;\" id=\"lab01\">01:00</label>\n" +
@@ -115,18 +180,26 @@
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"03\"  style=\"width: 10em; height: 5em;\" id=\"lab03\">03:00</label>\n" +
 =======
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"12\"  style=\"width: 10em; height: 5em;\" id=\"lab12\">12:00</label>\n" +
+=======
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"12\"  style=\"width: 10em; height: 5em;\" id=\"lab12\">12:00</label>\n" +
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"01\" value=\"01\">\n" +
-                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"01\"  style=\"width: 10em; height: 5em;\" id=\"lab01\">01:00</label>\n" +
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"01\"  style=\"width: 10em; height: 5em;\" id=\"lab01\">01:00</label>\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"02\" value=\"02\">\n" +
-                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"02\"  style=\"width: 10em; height: 5em;\" id=\"lab02\">02:00</label>\n" +
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"02\"  style=\"width: 10em; height: 5em;\" id=\"lab02\">02:00</label>\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"03\" value=\"03\">\n" +
+<<<<<<< HEAD
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"03\"  style=\"width: 10em; height: 5em;\" id=\"lab03\">03:00</label>\n" +
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"03\"  style=\"width: 10em; height: 5em;\" id=\"lab03\">03:00</label>\n" +
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                             "                        </div>\n" +
                             "                    </div>\n" +
                             "                    <div class=\"row mb-2\">\n" +
                             "                        <div class=\"d-flex\">\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"04\" value=\"04\">\n" +
+<<<<<<< HEAD
 <<<<<<< HEAD
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"04\"  style=\"width: 10em; height: 5em;\" id=\"lab04\">04:00</label>\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"05\" value=\"05\">\n" +
@@ -137,18 +210,26 @@
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"07\"  style=\"width: 10em; height: 5em;\" id=\"lab07\">07:00</label>\n" +
 =======
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"04\"  style=\"width: 10em; height: 5em;\" id=\"lab04\">04:00</label>\n" +
+=======
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"04\"  style=\"width: 10em; height: 5em;\" id=\"lab04\">04:00</label>\n" +
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"05\" value=\"05\">\n" +
-                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"05\"  style=\"width: 10em; height: 5em;\" id=\"lab05\">05:00</label>\n" +
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"05\"  style=\"width: 10em; height: 5em;\" id=\"lab05\">05:00</label>\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"06\" value=\"06\">\n" +
-                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"06\"  style=\"width: 10em; height: 5em;\" id=\"lab06\">06:00</label>\n" +
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"06\"  style=\"width: 10em; height: 5em;\" id=\"lab06\">06:00</label>\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"07\" value=\"07\">\n" +
+<<<<<<< HEAD
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"07\"  style=\"width: 10em; height: 5em;\" id=\"lab07\">07:00</label>\n" +
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"07\"  style=\"width: 10em; height: 5em;\" id=\"lab07\">07:00</label>\n" +
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                             "                        </div>\n" +
                             "                    </div>\n" +
                             "                    <div class=\"row mb-2\">\n" +
                             "                        <div class=\"d-flex\">\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"08\" value=\"08\">\n" +
+<<<<<<< HEAD
 <<<<<<< HEAD
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"08\"  style=\"width: 10em; height: 5em;\" id=\"lab08\">08:00</label>\n" +
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"09\" value=\"09\">\n" +
@@ -158,16 +239,25 @@
                             "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"09\" value=\"09\">\n" +
                             "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center\" for=\"09\"  style=\"width: 10em; height: 5em;\" id=\"lab09\">09:00</label>\n" +
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"08\"  style=\"width: 10em; height: 5em;\" id=\"lab08\">08:00</label>\n" +
+                            "                            <input type=\"radio\" class=\"btn-check\" name=\"reservationTime\" id=\"09\" value=\"09\">\n" +
+                            "                            <label class=\"btn btn-success opacity-100 me-2 d-flex justify-content-center align-items-center time-label\" for=\"09\"  style=\"width: 10em; height: 5em;\" id=\"lab09\">09:00</label>\n" +
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                             "                            <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
                             "                            <button class=\"btn btn-success opacity-100 me-2\" type=\"button\" style=\"width: 10em; height: 5em; visibility: hidden;\"></button>\n" +
                             "                        </div>\n" +
                             "                    </div>\n" +
                             "                </div>";
 <<<<<<< HEAD
+<<<<<<< HEAD
                         $("#replace").append(contents);
 =======
                         $("#btnCheck").append(contents);
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+                        $("#replace").append(contents);
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
 
                         // 서버에서 전송된 내용
                         for (let i = 0; i < data.length; i++) {
@@ -273,10 +363,14 @@
 
 <main class="container-sm" id="main">
 <<<<<<< HEAD
+<<<<<<< HEAD
     <form action="" method="POST" id="form">
 =======
     <form action="/bmn/reservationCus/ceoIdx=1&customerIdx=1" method="post">   <!--  th:attrappend="href=${item.ceoIdx}&customerIdx=${item.customerIdx}"  나중에 추가  -->
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+    <form action="" method="POST" id="form">   <!--  th:action=""  나중에 추가  -->
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
         <div class="row">
             <div class="col-2">
                 <div class="border">
@@ -298,10 +392,14 @@
                     <input type="date" name="reservationDate" id="reservationDate">
                 </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <div id="replace">
 =======
                 <div id="btnCheck">
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
+=======
+                <div id="replace">
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                     <div class="row border mb-3">
                         <h3>오전</h3>
                         <div class="row mb-2">
@@ -355,6 +453,7 @@
                 <div class="row">
                     <div class="d-flex justify-content-center">
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <input type="hidden" id="customerIdx" name="customerIdx" value="2">   <!--  나중에 수정해야함, th:value  -->
                         <input type="hidden" id="customerName" name="customerName" value="테스터2">
                         <input type="hidden" id="ceoIdx" name="ceoIdx" value="2">   <!--  나중에 수정해야함  -->
@@ -364,6 +463,13 @@
 >>>>>>> fa999be (bmn_0703(가게/날짜에 따른 ajax구현 완료, 예약 정보가져오기 진행중))
                         <button class="btn btn-secondary mx-5" type="button" style="width: 6em; height: 3em;" id="cancel">취소</button>
                         <button class="btn btn-primary mx-5" type="button" style="width: 6em; height: 3em;" id="check">확인</button>
+=======
+                        <input type="hidden" id="customerIdx" name="customerIdx" value="2">   <!--  나중에 수정해야함, th:value  -->
+                        <input type="hidden" id="ceoIdx" name="ceoIdx" value="2">   <!--  나중에 수정해야함  -->
+                        <input type="hidden" id="customerName" name="customerName" value="테스터2">
+                        <button class="btn btn-secondary mx-5" type="button" style="width: 6em; height: 3em;" id="cancel">취소</button>
+                        <button class="btn btn-primary mx-5" type="button" style="width: 6em; height: 3em;" id="check" data-bs-toggle="modal" data-bs-target="#modal">확인</button>
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                     </div>
                 </div>
             </div>
@@ -395,7 +501,11 @@
                             <td></td>
                             <td></td>
                         </tr>
+<<<<<<< HEAD
                         <tr>
+=======
+                        <tr th:if="${reservationPeople}">
+>>>>>>> 9a4b2cf (bmn_0704(손님 예약페이지 모달창으로 데이터 입력, 호출 작성 완료))
                             <th class="py-4 text-center" style="background-color: #D7D8DAFF">인원</th>
                             <td class="py-4 ps-2" id="resvPeople">2</td>
                             <td></td>
