@@ -2,8 +2,6 @@ package com.bitc.bmn_project.service;
 
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
-import com.bitc.bmn_project.DTO.ReviewDTO;
-import com.bitc.bmn_project.DTO.ReviewTagDTO;
 import com.bitc.bmn_project.common.FileUtils;
 import com.bitc.bmn_project.mapper.SimMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,29 +99,6 @@ public class SimServiceImpl implements SimService {
     @Override
     public int getGrade(String userId) throws Exception {
         return simMapper.getGrade(userId);
-    }
-
-    @Override
-    public String getStoreName(int ceoIdx) throws Exception {
-        return simMapper.getStoreName(ceoIdx);
-    }
-
-    @Override
-    public void reviewWrite(ReviewDTO review) throws Exception {
-        simMapper.reviewWrite(review);
-    }
-
-    @Override
-    public int getReviewIdx() throws Exception {
-
-        return simMapper.getReviewIdx();
-    }
-
-    @Override
-    public void reviewWriteTag(ReviewTagDTO reviewTag) throws Exception {
-
-        // 전달되는 태그의 값을 변경 해줘야함 on - > Y
-//        simMapper.reviewWriteTag(reviewTag);
     }
 
 }

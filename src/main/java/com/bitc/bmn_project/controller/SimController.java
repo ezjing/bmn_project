@@ -2,13 +2,9 @@ package com.bitc.bmn_project.controller;
 
 import com.bitc.bmn_project.DTO.CeoDTO;
 import com.bitc.bmn_project.DTO.CustomerDTO;
-import com.bitc.bmn_project.DTO.ReviewDTO;
-import com.bitc.bmn_project.DTO.ReviewTagDTO;
-import com.bitc.bmn_project.common.FileUtils;
 import com.bitc.bmn_project.service.SimService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +19,6 @@ public class SimController {
 
     @Autowired
     private SimService simService;
-
-    @Autowired
-    private FileUtils fileUtils;
 
 
     @RequestMapping("/")
@@ -44,21 +37,16 @@ public class SimController {
     public String doLoginProcess(@RequestParam String userId,
                                  @RequestParam String userPw,
                                  HttpServletRequest req) throws Exception {
-
-
-        // 로그인 성공 혹은 실패시 시도했던 주소로 리다이렉트 해주기 위한 값
         String returnUrl = req.getRequestURI();
         System.out.println("userId : " + userId + ", userPw :" + userPw + ", returnUrl :" + returnUrl);
 
-        // 로그인 로직을 수행하기 위한 변수
         int result = 0;
         int grade = 0;
-
-        // 1. DB에 존재하는 ID인지 확인(손님 / 사장)
+        // 1. DB에 존재하는지 확인(ID 만)
         int isUser = simService.isUser(userId);
 
         HttpSession session = req.getSession();
-        session.setMaxInactiveInterval(60); // 세션 시간 1분으로 설정
+        session.setMaxInactiveInterval(60);
         CustomerDTO customer;
         CeoDTO ceo;
 
@@ -94,13 +82,14 @@ public class SimController {
 
             // 3-3 로그인 성공 관리자
             case 10 -> {
-                session.setAttribute("user", "admin"); // 어드민은 가져와야할 값이 없기 때문에 구분만 했음
+                session.setAttribute("user", "admin");
                 session.removeAttribute("failMsg");
                 return "redirect:" + returnUrl;
             }
 
         }
 
+        // 로직 조정 필요
         if (result == 1) { // 3-4 로그인 성공 사장님
             ceo = simService.getCeoInfo(userId);
             session.setAttribute("user", ceo);
@@ -263,50 +252,7 @@ public class SimController {
         System.out.println(files);
 
         simService.addStore(store, mainImage, thumbnail, files);
-        return "redirect:/bmn/";
-    }
 
-    @RequestMapping(value = "/review", method = RequestMethod.GET)
-    public ModelAndView doReview(
-            @RequestParam("ceoIdx") int ceoIdx
-    ) throws Exception {
-
-        ModelAndView mv = new ModelAndView("review");
-
-        String ceoStore = simService.getStoreName(ceoIdx);
-        mv.addObject("ceoStore", ceoStore);
-        mv.addObject("ceoIdx", ceoIdx);
-
-        return mv;
-    }
-
-    @RequestMapping(value = "/review/write", method = RequestMethod.POST)
-    public String doReviewWrite(
-            ReviewDTO review,
-            ReviewTagDTO reviewTag,
-            @RequestParam(value = "reviewImgFile", required = false) MultipartFile reviewImgFile
-    ) throws Exception {
-
-
-        // 이미지 파일 파싱 및 실제 파일 저장
-        // 파싱을 해서 가져오는 정보는 String 타입의 파일 저장경로
-        String reviewImagePath = fileUtils.parseFileInfo(reviewImgFile);
-        review.setReviewImg(reviewImagePath);
-
-        // 태그를 제외한 나머지 값 insert 하는 서비스
-        System.out.println(review);
-        simService.reviewWrite(review);
-
-        // 방금 insert한 리뷰의 idx 가져오기(가장 최신, 번호가 가장 높은 idx)
-        int newReviewIdx = simService.getReviewIdx();
-        reviewTag.setReviewIdx(newReviewIdx);
-
-        // 태그 값 insert 하는 서비스 (미구현)
-        System.out.println(reviewTag);
-        simService.reviewWriteTag(reviewTag);
-
-
-        // 상세뷰로 보내야함
         return "redirect:/bmn/";
     }
 }
