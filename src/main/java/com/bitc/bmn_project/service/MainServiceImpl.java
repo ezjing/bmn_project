@@ -40,4 +40,14 @@ public class MainServiceImpl implements MainService{
     public List<CeoDTO> selectWFoods() throws Exception {
         return mainMapper.selectWFoods();
     }
+
+    @Override
+    public List<CeoDTO> scorePlacingLists() throws Exception {
+        return  mainMapper.scorePlacingLists();
+    }
+
+    @Override
+    public List<CeoDTO> followPlacingLists() throws Exception {
+        return mainMapper.followPlacingLists();
+    }
 }

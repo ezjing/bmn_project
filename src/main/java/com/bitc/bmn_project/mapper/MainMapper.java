@@ -19,4 +19,8 @@ public interface MainMapper {
     List<CeoDTO> selectCFoods() throws Exception;
     // 양식
     List<CeoDTO> selectWFoods() throws Exception;
+
+    List<CeoDTO> scorePlacingLists() throws Exception;
+
+    List<CeoDTO> followPlacingLists() throws Exception;
 }

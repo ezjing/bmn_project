@@ -32,6 +32,18 @@
         ORDER BY RAND() LIMIT 0,20 ;
     </select>
 
+    <!-- 평점 높은 순 -->
+    <select id="scorePlacingLists" parameterType="com.bitc.bmn_project.DTO.CeoDTO">
+        SELECT ceo_idx, ceo_menu_img1, ceo_store, ceo_score, ceo_follow_cnt, ceo_main_menu, ceo_city_address FROM ceo_tp
+        ORDER BY ceo_score DESC LIMIT 0, 20;
+    </select>
+
+    <!-- 팔로우 높은 순 -->
+    <select id="followPlacingLists" parameterType="com.bitc.bmn_project.DTO.CeoDTO">
+        SELECT ceo_idx, ceo_menu_img1, ceo_store, ceo_score, ceo_follow_cnt, ceo_main_menu, ceo_city_address FROM ceo_tp
+        ORDER BY ceo_follow_cnt DESC  LIMIT 0, 20;
+    </select>
+
 <!--  평점 순 검색결과 SELECT 문   -->
     <select id="storeLists" parameterType="com.bitc.bmn_project.DTO.CeoDTO">
         SELECT ceo_idx, ceo_menu_img1, ceo_store, ceo_score, ceo_follow_cnt, ceo_main_menu, ceo_city_address FROM ceo_tp

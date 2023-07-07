@@ -16,4 +16,8 @@ public interface MainService {
     List<CeoDTO> selectCFoods() throws Exception;
 
     List<CeoDTO> selectWFoods() throws Exception;
+
+    List<CeoDTO> scorePlacingLists() throws Exception;
+
+    List<CeoDTO> followPlacingLists() throws Exception;
 }

@@ -23,7 +23,14 @@ public class ParkController {
         List<CeoDTO> selectJFood = mainService.selectJFoods();
         List<CeoDTO> selectCFood = mainService.selectCFoods();
         List<CeoDTO> selectWFood = mainService.selectWFoods();
+        List<CeoDTO> scorePlacingList = mainService.scorePlacingLists();
+        List<CeoDTO> followPlacingList = mainService.followPlacingLists();
 
+
+        // 평점순 List
+        mv.addObject("scorePlacingList",scorePlacingList);
+        // 팔로우 순 List
+        mv.addObject("followPlacingList",followPlacingList);
         // 한식 List
         mv.addObject("ceoDtoList",coeDtoList);
         // 일식 List
