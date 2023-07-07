@@ -50,8 +50,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/bmn/sigunUp/idCheck")
 
                 // 나중에 합칠때 빼줘야함
+                // (사장이 로그인 했을때)
                 .excludePathPatterns("/bmn/ceoStore")
                 .excludePathPatterns("/bmn/ceoStore/popup")
-                .excludePathPatterns("/bmn/ceoStore/addStore");
+                .excludePathPatterns("/bmn/ceoStore/addStore")
+
+                // (리뷰 작성시)
+                .excludePathPatterns("/bmn/review")
+                .excludePathPatterns("/bmn/review/write");
+
+
     }
 }
