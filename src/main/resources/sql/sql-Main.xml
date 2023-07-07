@@ -50,6 +50,14 @@
         WHERE (ceo_store LIKE CONCAT('%',#{keyWorld},'%') OR ceo_main_menu LIKE CONCAT('%',#{keyWorld},'%')  OR ceo_city_address LIKE CONCAT('%',#{keyWorld},'%') )
         ORDER BY ceo_score DESC LIMIT 0, 9;
     </select>
+    
+    <!-- 리뷰 순 검색결과 SELECT 문 -->
+    <select id="reviewCntLists" parameterType="com.bitc.bmn_project.DTO.ReviewCntDto">
+        SELECT A.ceo_idx, A.ceo_menu_img1, A.ceo_store, A.ceo_score, A.ceo_follow_cnt, A.ceo_main_menu, A.ceo_city_address, COUNT(B.ceo_idx) AS review_cnt FROM ceo_tp A JOIN review_tp B
+        ON A.ceo_idx = B.ceo_idx
+        WHERE (A.ceo_store LIKE CONCAT('%',#{keyWorld},'%') OR A.ceo_main_menu LIKE CONCAT('%',#{keyWorld},'%')  OR A.ceo_city_address LIKE CONCAT('%',#{keyWorld},'%') )
+        GROUP BY A.ceo_idx;
+    </select>
 
     <!--  팔로우 수 검색결과 SELECT 문   -->
     <select id="followLists" parameterType="com.bitc.bmn_project.DTO.CeoDTO">
@@ -58,5 +66,11 @@
         ORDER BY ceo_follow_cnt DESC  LIMIT 0, 9;
     </select>
 
-
+    <!-- 카테고리 필터 기능 추가 -->
+    <select id="filterCateGoryLists" parameterType="com.bitc.bmn_project.DTO.CeoDTO">
+        SELECT ceo_idx, ceo_menu_img1, ceo_store, ceo_score, ceo_follow_cnt, ceo_main_menu, ceo_city_address,ceo_category FROM ceo_tp
+        WHERE (ceo_store LIKE CONCAT('%',#{keyWorld},'%') OR ceo_main_menu LIKE CONCAT('%',#{keyWorld},'%')  OR ceo_city_address LIKE CONCAT('%',#{keyWorld},'%') ) AND ceo_category = #{cateGory}
+        ORDER BY ceo_score DESC LIMIT 0, 9;
+    </select>
+    
 </mapper>

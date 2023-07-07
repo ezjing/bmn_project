@@ -1,6 +1,7 @@
 package com.bitc.bmn_project.service;
 
 import com.bitc.bmn_project.DTO.CeoDTO;
+import com.bitc.bmn_project.DTO.ReviewCntDto;
 import com.bitc.bmn_project.mapper.MainMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,10 @@ public class MainServiceImpl implements MainService{
     @Override
     public List<CeoDTO> followPlacingLists() throws Exception {
         return mainMapper.followPlacingLists();
+    }
+
+    @Override
+    public List<ReviewCntDto> reviewCntLists(String keyWorld) throws Exception {
+        return mainMapper.reviewCntLists(keyWorld);
     }
 }

@@ -1,6 +1,7 @@
 package com.bitc.bmn_project.controller;
 
 import com.bitc.bmn_project.DTO.CeoDTO;
+import com.bitc.bmn_project.DTO.ReviewCntDto;
 import com.bitc.bmn_project.service.MainService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +44,21 @@ public class ParkController {
     }
 
     @RequestMapping(value="/bmnSearchList", method = RequestMethod.GET)
-    public ModelAndView searchListGet(@Param("keyWorld") String keyWorld) throws Exception{
+    public ModelAndView searchListGet(
+            @Param("keyWorld") String keyWorld,
+            @Param("categoryFood") String categoryFood) throws Exception{
         ModelAndView mv = new ModelAndView("main/bmnSearchList");
         // keyWorld 값 가져 오는 지 확인
 
         // 평점 순위 검색 리스트
         List<CeoDTO> storeList = mainService.storeLists(keyWorld);
+        // 리뷰 순 검색 리스트
+        List<ReviewCntDto> reviewCntList = mainService.reviewCntLists(keyWorld);
         // 팔로우 순위 검색 리스트
         List<CeoDTO> followList = mainService.followLists(keyWorld);
 
         mv.addObject("storeList",storeList);
+        mv.addObject("reviewCntList",reviewCntList);
         mv.addObject("followList",followList);
         mv.addObject("keyWorld",keyWorld);
         return mv;
