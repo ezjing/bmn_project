@@ -28,9 +28,9 @@ public class LeeController {
         return "index";
     }
 
-    // 받기 전에 상세 페이지에서 get으로 가게 테이블 정보가 제공되어야함, mv.addObject(가게정보 dto) 이런식
+    // 받기 전에 상세 페이지에서 get으로 가게 테이블 정보(ceoIdx, ceoName)가 제공되어야함 제공된거 타임리프로 input hidden에 꼭 넣어야함, mv.addObject(가게정보 dto) 이런식
     // 고객 정보가 입력된 view 제공
-    @RequestMapping(value = "/reservationCus/ceoIdx={ceoIdx}", method = RequestMethod.GET)
+    @RequestMapping(value = "/reservationCus/ceoIdx={ceoIdx}", method = RequestMethod.GET)  // ceoIdx 통합할때 지워버리기
     public ModelAndView reservationCusView(@PathVariable int ceoIdx, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 //        CustomerDTO customer = new CustomerDTO(); // 로그인 정보 쓸때 주석 해제
 //        HttpSession session = req.getSession();   // 로그인 정보 쓸때 주석 해제
@@ -167,9 +167,37 @@ public class LeeController {
 
     /////////////////////////////// 마이페이지 /////////////////////////////////
 
-    @RequestMapping(value = "/myPage")
+
+
+
+
+
+    @RequestMapping(value = "/myPageCus")
     public String myPageView() throws Exception {
 
         return "myPage/myPageCus";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/myPageCus/reservation", method = RequestMethod.POST)
+    public Object myPageCusReservation(@RequestParam int customerIdx) throws Exception {
+        List<ReservationDTO> reservation = leeService.myPageReservation(customerIdx);
+
+        return reservation;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/myPageCus/follow", method = RequestMethod.POST)
+    public Object myPageCusFollow(@RequestParam int customerIdx) throws Exception {
+
+        return null;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/myPageCus/review", method = RequestMethod.POST)
+    public Object myPageCusView(@RequestParam int customerIdx) throws Exception {
+        List<ReservationDTO> reservation = leeService.myPageReview(customerIdx);
+
+        return reservation;
     }
 }

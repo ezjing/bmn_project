@@ -54,4 +54,14 @@ public class LeeServiceImpl implements LeeService{
 
         return time;
     }
+
+    @Override
+    public List<ReservationDTO> myPageReservation(int customerIdx) throws Exception {
+        return leeMapper.myPageReservation(customerIdx);
+    }
+
+    @Override
+    public List<ReservationDTO> myPageReview(int customerIdx) throws Exception {
+        return leeMapper.myPageReview(customerIdx);
+    }
 }

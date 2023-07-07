@@ -18,4 +18,8 @@ public interface LeeService {
     int reservationConfirm(String reservationDate, int ceoIdx, int reservationTime) throws  Exception;
 
     int reservationRefuse(String reservationDate, int ceoIdx, int reservationTime) throws  Exception;
+
+    List<ReservationDTO> myPageReservation(int customerIdx) throws Exception;
+
+    List<ReservationDTO> myPageReview(int customerIdx) throws Exception;
 }

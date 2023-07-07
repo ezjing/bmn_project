@@ -14,7 +14,147 @@
 
     </style>
     <script>
+        $(document).ready(function () {
+            const customerIdx = $("#customerIdx").val();
+            $("#list-reservation-list").on("click", function () {
+                $.ajax({    // 예약 내역 ajax
+                    url: "/bmn/myPageCus/reservation",
+                    type: "POST",
+                    data: {customerIdx: customerIdx},
+                    success(data) { // data = 가게이름, 날짜, 시간, 예약상태 LIST
+                        // alert("ajax 통신 성공");
+                        // console.log(data);
 
+                        let thead =
+                            "<tr>\n" +
+                            "    <th>밥뭇나 맛집</th>\n" +
+                            "    <th>날짜</th>\n" +
+                            "    <th>시간</th>\n" +
+                            "    <th>예약 상태</th>\n" +
+                            "</tr>";
+
+                        $("#theadReservation").append(thead);
+
+                        let tbody = "";
+
+                        if (data.length == 0) {
+                            tbody =
+                                "<tr>\n" +
+                                "    <td colspan=\"4\">예약내역이 없습니다</td>\n" +
+                                "</tr>";
+
+                            $("#tbodyReservation").append(tbody);
+                        }
+                        else {
+                            for (let i = 0; i < data.length; i++) {
+                                const ceoStore = data[i].ceoStore;
+                                const reservationDate = data[i].reservationDate;
+                                const reservationTime = data[i].reservationTime;
+                                let reservationStat = data[i].reservationStat;
+
+                                if (reservationStat == 1 ) {
+                                    reservationStat = "예약 신청 중";
+                                }
+                                else if (reservationStat == 2) {
+                                    reservationStat = "예약 완료";
+                                }
+
+                                tbody =
+                                    "<tr>\n" +
+                                    "    <td>" + ceoStore + "</td>\n" +
+                                    "    <td>" + reservationDate + "</td>\n" +
+                                    "    <td>" + reservationTime + "</td>\n" +
+                                    "    <td>" + reservationStat + "</td>\n" +
+                                    "</tr>";
+
+                                $("#tbodyReservation").append(tbody);
+                            }
+                        }
+                    },
+                    error() {
+                        alert("ajax 통신 실패");
+                    }
+                });
+            });
+            $("#list-follow-list").on("click", function () {
+                $.ajax({    // follow 내역 ajax
+                    url: "/bmn/myPageCus/follow",
+                    type: "POST",
+                    data: {customerIdx: customerIdx},
+                    success(data) {
+                        alert("ajax 통신 성공");
+                    },
+                    error() {
+                        alert("ajax 통신 실패");
+                    }
+                });
+            });
+            $("#list-review-list").on("click", function () {
+                $.ajax({    // review 내역 ajax
+                    url: "/bmn/myPageCus/review",
+                    type: "POST",
+                    data: {customerIdx: customerIdx},
+                    success(data) {
+                        alert("ajax 통신 성공");
+
+                        let thead =
+                            "<tr>\n" +
+                            "    <th>밥뭇나 맛집</th>\n" +
+                            "    <th>리뷰내용</th>\n" +
+                            "    <th>평점</th>\n" +
+                            "    <th>날짜</th>\n" +
+                            "</tr>";
+
+                        $("#theadReview").append(thead);
+
+                        let tbody = "";
+
+                        if (data.length == 0) {
+                            tbody =
+                                "<tr>\n" +
+                                "    <td colspan=\"4\">예약내역이 없습니다</td>\n" +
+                                "</tr>";
+
+                            $("#tbody").append(tbody);
+                        }
+                        else {
+                            for (let i = 0; i < data.length; i++) {
+                                const ceoStore = data[i].ceoStore;
+                                let reviewContents = data[i].reviewContents;
+                                const reviewScore = data[i].reviewScore;
+                                const reviewDate = data[i].reviewDate;
+
+                                tbody =
+                                    "<tr>\n" +
+                                    "    <td>" + ceoStore + "</td>\n" +
+                                    "    <td>" + reviewContents + "</td>\n" +
+                                    "    <td>" + reviewScore + "</td>\n" +
+                                    "    <td>" + reviewDate + "</td>\n" +
+                                    "</tr>";
+
+                                $("#tbody").append(tbody);
+                            }
+                        }
+                    },
+                    error() {
+                        alert("ajax 통신 실패");
+                    }
+                });
+            });
+            $("#list-question-list").on("click", function () {
+                $.ajax({    // question 내역 ajax
+                    url: "/bmn/myPageCus/question",
+                    type: "POST",
+                    data: {customerIdx: customerIdx},
+                    success(data) {
+                        alert("ajax 통신 성공");
+                    },
+                    error() {
+                        alert("ajax 통신 실패");
+                    }
+                });
+            });
+        });
     </script>
 
 </head>
@@ -38,6 +178,7 @@
                 </div>
             </div>
 
+            <!--  콜렙스  -->
             <div class="collapse" id="collapseExample">
                     <div class="container-sm mt-5">
                         <div class="col-sm-8 mx-auto">
@@ -105,37 +246,37 @@
 
 
             <div class="list-group list-group-item-action list-group-horizontal" id="list-tab" role="tablist">
-                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">예약내역</a>
-                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">팔로우</a>   <!--  사장은 팔로워  -->
-                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">내가 쓴 리뷰</a>
-                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">문의사항</a>
+                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center active" id="list-reservation-list" data-bs-toggle="list" href="#list-reservation" role="tab" aria-controls="list-reservation">예약내역</a>
+                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center" id="list-follow-list" data-bs-toggle="list" href="#list-follow" role="tab" aria-controls="list-follow">팔로우</a>   <!--  사장은 팔로워  -->
+                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center" id="list-review-list" data-bs-toggle="list" href="#list-review" role="tab" aria-controls="list-review">내가 쓴 리뷰</a>
+                <a class="list-group-item list-group-item-action flex-fill list-group-item-primary text-center" id="list-question-list" data-bs-toggle="list" href="#list-question" role="tab" aria-controls="list-question">문의사항</a>
             </div>
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                <div class="tab-pane fade show active" id="list-reservation" role="tabpanel" aria-labelledby="list-reservation-list">
                     <table class="table table-hover">
+                        <colgroup>
+                            <col style="width: 40%"/>
+                            <col style="width: 30%"/>
+                            <col style="width: 20%"/>
+                            <col style="width: 10%"/>
+                        </colgroup>
+                        <thead id="theadReservation">
+
                         </thead>
-                        <tbody> <!--  tr 타임리프 반복문 필요  -->
-                        <tr>
-                            <td>김치찌개 집</td>
-                        </tr>
-                        <tr>
-                            <td>돼지국밥 집</td>
-                        </tr>
-                        <tr>
-                            <td>중국집</td>
-                        </tr>
-                        <tr>
-                            <td>파스타 집</td>
-                        </tr>
+                        <tbody id="tbodyReservation">
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-                <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-                <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+                <div class="tab-pane fade" id="list-follow" role="tabpanel" aria-labelledby="list-follow-list">
+
+                </div>
+                <div class="tab-pane fade" id="list-review" role="tabpanel" aria-labelledby="list-review-list">...</div>
+                <div class="tab-pane fade" id="list-question" role="tabpanel" aria-labelledby="list-question-list">...</div>
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="customerIdx" name="customerIdx" value="2"> <!--  세션에서 자동으로 받아오도록 수정  -->
 </main>
 
 <footer th:replace="~{layout/footer :: footer}"></footer>

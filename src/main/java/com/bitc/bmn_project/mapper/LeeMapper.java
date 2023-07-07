@@ -20,4 +20,8 @@ public interface LeeMapper {
     void reservationConfirm(String reservationDate, int ceoIdx, int reservationTime) throws Exception;
 
     void reservationRefuse(String reservationDate, int ceoIdx, int reservationTime) throws Exception;
+
+    List<ReservationDTO> myPageReservation(int customerIdx) throws Exception;
+
+    List<ReservationDTO> myPageReview(int customerIdx) throws Exception;
 }
